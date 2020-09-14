@@ -12,11 +12,6 @@
 */
 
 Route::get('/', function () {
-    \App\User::create([
-        'name' => 'Fulano',
-        'email' => 'fulaninho@gmail.com',
-        'password' => '12345678'
-    ]);
     $users = \App\User::all();
 
     return view('welcome', compact('users'));
