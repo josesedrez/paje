@@ -7,7 +7,7 @@
 
         <title>Laravel</title>
         @foreach($users as $user)
-            <h2>{{$user->name}}</h2>
+            <h2>{{$user->name}}2</h2>
         @endforeach
 
         <!-- Fonts -->
