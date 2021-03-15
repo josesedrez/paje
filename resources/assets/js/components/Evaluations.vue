@@ -1,5 +1,5 @@
 <template>
-    <p>Início</p>
+    <p>Avaliações</p>
 </template>
 
 <script>

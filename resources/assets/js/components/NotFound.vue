@@ -1,5 +1,5 @@
 <template>
-    <p>Início</p>
+    <p>404 Not Found</p>
 </template>
 
 <script>
