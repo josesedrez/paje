@@ -16,3 +16,13 @@ Route::get('/{any}', function () {
 
     return view('app');
 })->where('any', '.*');
+
+Route::post('/register', 'Auth\RegisterController@create');
+
+Route::post('/login', 'Auth\LoginController@login');
+
+Route::post('/logout', 'Auth\LoginController@logout');
+
+//Auth::routes();
+
+//Route::get('/home', 'HomeController@index')->name('home');

@@ -3,6 +3,9 @@ import Evaluations from './components/Evaluations';
 import Games from './components/Games';
 import Profile from './components/Profile';
 import NotFound from './components/NotFound';
+import Users from './components/Users';
+import Login from './components/Login';
+import Register from './components/Register';
 
 export default {
     mode: 'history',
@@ -27,6 +30,18 @@ export default {
         {
             path: '/profile',
             component: Profile
+        },
+        {
+            path: '/users',
+            component: Users
+        },
+        {
+            path: '/login',
+            component: Login
+        },
+        {
+            path: '/register',
+            component: Register
         }
     ]
 }
