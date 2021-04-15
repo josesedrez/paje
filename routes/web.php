@@ -23,6 +23,10 @@ Route::post('/login', 'Auth\LoginController@login');
 
 Route::post('/logout', 'Auth\LoginController@logout');
 
+Route::post('/current-user', 'UserController@getCurrentUser');
+
+Route::post('/change-profile', 'UserController@changeProfile');
+
 //Auth::routes();
 
 //Route::get('/home', 'HomeController@index')->name('home');

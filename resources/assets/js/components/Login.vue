@@ -40,13 +40,16 @@ export default {
     },
     methods: {
         login () {
+            this.resetErrors();
+
+            if (!this.isValidInputs()) {
+                return;
+            }
+
             var payload = {
                 email: this.email,
                 password: this.password,
             };
-
-            this.emailError = '';
-            this.passwordError = '';
 
             User.login(payload, response => {
                 switch (response.data) {
@@ -62,6 +65,34 @@ export default {
                         break;
                 }
             });
+        },
+        resetErrors() {
+            this.emailError = '';
+            this.passwordError = '';
+        },
+        isValidInputs() {
+            let errors = 0;
+
+            if (!this.isValidEmail(this.email)) {
+                this.emailError = 'O e-mail inserido é inválido';
+                errors += 1;
+            }
+
+            if (this.email === '') {
+                this.emailError = 'Este campo deve ser preenchido';
+                errors += 1;
+            }
+
+            if (this.password === '') {
+                this.passwordError = 'Este campo deve ser preenchido';
+                errors += 1;
+            }
+
+            return errors === 0;
+        },
+        isValidEmail(email) {
+            const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            return re.test(email);
         }
     }
 }

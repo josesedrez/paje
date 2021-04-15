@@ -136,6 +136,47 @@ class UserController extends Controller
         return redirect()->back()->withErrors(['wrongPassword' => 'A senha informada está errada']);
     }
 
+    public function getCurrentUser()
+    {
+        return Auth::user();
+    }
+
+    public function changeProfile()
+    {
+        $image = request('image');
+
+        $exploded = explode(',', $image);
+
+        if (str_contains($exploded[0], 'png')) {
+            $extension = 'png';
+        } else if (str_contains($exploded[0], 'jpg')) {
+            $extension = 'jpg';
+        } else if (str_contains($exploded[0], 'jpeg')) {
+            $extension = 'jpg';
+        } else {
+            return 'invalidExtension';
+        }
+
+        $decode = base64_decode($exploded[1]);
+
+        $filename = str_random() . '.' . $extension;
+
+        $path = public_path() . '/images/profiles/' . $filename;
+
+        file_put_contents($path, $decode);
+
+        $user = Auth::user();
+//
+//        $file = request('file');
+//
+//        $profileName = $this->uploadFileAndGetName($file, 'profiles');
+//
+        $user->profile = $filename;
+        $user->save();
+//
+        return "sucesso";
+    }
+
     /**
      * Remove the specified resource from storage.
      *

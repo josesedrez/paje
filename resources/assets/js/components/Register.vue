@@ -51,14 +51,9 @@
         },
         methods: {
             register () {
-                this.emailError = '';
-                this.nameError = '';
-                this.passwordError = '';
-                this.confirmPasswordError = '';
+                this.resetErrors();
 
-                if (!this.validatePassword()) {
-                    this.confirmPasswordError = "As senhas precisam ser iguais";
-
+                if (!this.isValidInputs()) {
                     return;
                 }
 
@@ -98,8 +93,50 @@
 
                 });
             },
-            validatePassword () {
-                return this.password === this.confirmPassword;
+            resetErrors() {
+                this.emailError = '';
+                this.nameError = '';
+                this.passwordError = '';
+                this.confirmPasswordError = '';
+            },
+            isValidInputs() {
+                let errors = 0;
+
+                if (!this.isValidEmail(this.email)) {
+                    this.emailError = 'O e-mail inserido é inválido';
+                    errors += 1;
+                }
+
+                if (this.password !== this.confirmPassword) {
+                    this.confirmPasswordError = 'Este campo e o da senha devem ser iguais';
+                    errors += 1;
+                }
+
+                if (this.email === '') {
+                    this.emailError = 'Este campo deve ser preenchido';
+                    errors += 1;
+                }
+
+                if (this.name === '') {
+                    this.nameError = 'Este campo deve ser preenchido';
+                    errors += 1;
+                }
+
+                if (this.password === '') {
+                    this.passwordError = 'Este campo deve ser preenchido';
+                    errors += 1;
+                }
+
+                if (this.confirmPassword === '') {
+                    this.confirmPasswordError = 'Este campo deve ser preenchido';
+                    errors += 1;
+                }
+
+                return errors === 0;
+            },
+            isValidEmail(email) {
+                const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                return re.test(email);
             }
         }
     }
