@@ -4237,6 +4237,7 @@
 }
 
 .sticky {
+  position: -webkit-sticky;
   position: sticky;
 }
 
@@ -10410,6 +10411,7 @@ a {
   }
 
   .sm\:sticky {
+    position: -webkit-sticky;
     position: sticky;
   }
 
@@ -16063,6 +16065,7 @@ a {
   }
 
   .md\:sticky {
+    position: -webkit-sticky;
     position: sticky;
   }
 
@@ -21716,6 +21719,7 @@ a {
   }
 
   .lg\:sticky {
+    position: -webkit-sticky;
     position: sticky;
   }
 
@@ -27369,6 +27373,7 @@ a {
   }
 
   .xl\:sticky {
+    position: -webkit-sticky;
     position: sticky;
   }
 

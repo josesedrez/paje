@@ -27,6 +27,7 @@
     "dependencies": {
         "node": "^14.16.0",
         "v-slim-dialog": "0.0.10",
+        "vue-loading-overlay": "^3.4.2",
         "vue-router": "^3.5.1"
     }
 }

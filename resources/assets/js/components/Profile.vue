@@ -1,5 +1,10 @@
 <template>
     <div class="w-full h-full justify-center flex">
+        <loading :active.sync="isLoading"
+                 :can-cancel="false"
+                 :is-full-page="fullPage">
+        </loading>
+
         <div class="w-3/4 h-full flex-none">
             <div class="w-full h-48 flex">
                 <div class="w-1/3 h-48">
@@ -27,15 +32,23 @@
 
 <script>
     import User from "../services/User";
+    import Loading from 'vue-loading-overlay';
+    import 'vue-loading-overlay/dist/vue-loading.css';
 
     export default {
         data() {
             return {
+                isLoading: false,
+                fullPage: true,
+
                 email: '',
                 name: '',
                 profile: '',
                 image: '',
             }
+        },
+        components: {
+            Loading
         },
         created: function () {
             User.getCurrentUser(response => {

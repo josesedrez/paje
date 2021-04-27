@@ -1,5 +1,10 @@
 <template>
     <div class="w-full h-full justify-center flex">
+        <loading :active.sync="isLoading"
+                 :can-cancel="false"
+                 :is-full-page="fullPage">
+        </loading>
+
         <div class="w-3/4 h-full pt-10 justify-center flex-none">
             <div class="w-full justify-center flex">
                 <input class="h-10 w-2/5" name="email" type="email" v-model="email" placeholder="E-mail">
@@ -34,10 +39,15 @@
 
 <script>
     import User from '../services/User'
+    import Loading from 'vue-loading-overlay';
+    import 'vue-loading-overlay/dist/vue-loading.css';
 
     export default {
         data() {
             return {
+                isLoading: false,
+                fullPage: true,
+
                 email: '',
                 name: '',
                 password: '',
@@ -48,6 +58,9 @@
                 passwordError: '',
                 confirmPasswordError: '',
             }
+        },
+        components: {
+            Loading
         },
         methods: {
             register () {
@@ -62,6 +75,8 @@
                     name: this.name,
                     password: this.password,
                 };
+
+                this.isLoading = true;
 
                 User.register(payload, response => {
                     console.log(response);
@@ -91,6 +106,7 @@
                             break;
                     }
 
+                    this.isLoading = false;
                 });
             },
             resetErrors() {
