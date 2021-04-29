@@ -10,7 +10,7 @@
                 <div class="w-1/3 h-48">
                     <input type="file"  accept="image/*" name="image" id="file"  @change="loadFile" style="display: none;">
                     <p><label for="file" style="cursor: pointer;">
-                        <img class="h-48 w-full rounded-full" :src="'images/profiles/' + profile">
+                        <img class="h-48 w-full rounded-full" :src="'images/profiles/' + profile" @mouseover="showHoverProfile" @mouseleave="hideHoverProfile">
                     </label></p>
                 </div>
                 <div class="w-2/3 h-48 flex-none">
@@ -44,6 +44,7 @@
                 email: '',
                 name: '',
                 profile: '',
+                profileBackup: '',
                 image: '',
             }
         },
@@ -51,13 +52,18 @@
             Loading
         },
         created: function () {
+            this.isLoading = true;
+
             User.getCurrentUser(response => {
                 if (response.data) {
                     this.email= response.data.email;
                     this.name= response.data.name;
                     this.profile= response.data.profile;
+                    this.profileBackup= response.data.profile;
+                    this.isLoading = false;
                 } else {
                     this.$router.push('/notFound');
+                    this.isLoading = false;
                 }
             });
         },
@@ -68,6 +74,8 @@
                 var reader = new FileReader;
 
                 reader.onload = (event) => {
+                    this.isLoading = true;
+
                     this.image = event.target.result;
 
                     let payload = {
@@ -82,13 +90,28 @@
                                 this.$dialogs.alert('Tente utilizar uma imagem com extensão .png ou .jpg', options)
                                 break;
                             default:
-                                window.location.reload();
+                                User.getCurrentUser(response => {
+                                    if (response.data) {
+                                        this.profile = response.data.profile;
+                                        this.profileBackup = this.profile;
+
+                                        this.isLoading = false;
+                                    } else {
+                                        window.location.reload();
+                                    }
+                                });
                         }
                     });
                 };
 
                 reader.readAsDataURL(file);
             },
+            showHoverProfile() {
+                this.profile = 'hover_profile.png';
+            },
+            hideHoverProfile() {
+                this.profile = this.profileBackup;
+            }
         }
     }
 </script>

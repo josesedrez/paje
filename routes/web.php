@@ -25,8 +25,14 @@ Route::post('/logout', 'Auth\LoginController@logout');
 
 Route::post('/current-user', 'UserController@getCurrentUser');
 
+Route::post('/all-users', 'UserController@getAllUsers');
+
+Route::post('/user-evaluations-count', 'UserController@getUserEvaluationsCount');
+
 Route::post('/change-profile', 'UserController@changeProfile');
 
 //Auth::routes();
 
 //Route::get('/home', 'HomeController@index')->name('home');
+
+//URL::forceScheme('https');

@@ -21,6 +21,18 @@ export default class Goal {
         axios.post('/current-user').then(callback)
     }
 
+    static getAllUsers (callback) {
+        console.log(callback);
+
+        axios.post('/all-users').then(callback)
+    }
+
+    static getUserEvaluationsCount (payload, callback) {
+        console.log(callback);
+
+        axios.post('/user-evaluations-count', payload).then(callback)
+    }
+
     static changeProfile (payload, callback) {
         console.log(callback);
 

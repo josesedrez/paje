@@ -141,6 +141,17 @@ class UserController extends Controller
         return Auth::user();
     }
 
+    public function getAllUsers()
+    {
+        return User::all();
+    }
+
+    public function getUserEvaluationsCount() {
+        $user = User::find(request('userId'));
+
+        return $user->evaluations->count();
+    }
+
     public function changeProfile()
     {
         $image = request('image');
