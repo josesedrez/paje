@@ -49,11 +49,11 @@ class LoginController extends Controller
             return "emailDontExist";
         }
 
-        if (Hash::check(request('password'), $user->password)) {
+//        if (Hash::check(request('password'), $user->password)) {
             Auth::login($user);
 
             return "logged";
-        }
+//        }
 
         return "passwordInvalid";
     }
