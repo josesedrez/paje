@@ -18172,11 +18172,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                         _this.$router.push('/');
                         window.location.reload();
                         break;
-                    case 'emailDontExist':
-                        _this.emailError = "E-mail não cadastrado";
-                        break;
-                    case 'passwordInvalid':
-                        _this.passwordError = "Senha incorreta";
+                    case 'failed':
+                        _this.emailError = "E-mail não cadastrado ou senha incorreta";
                         break;
                 }
                 _this.isLoading = false;

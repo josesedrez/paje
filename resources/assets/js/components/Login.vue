@@ -67,11 +67,8 @@ export default {
                         this.$router.push('/');
                         window.location.reload();
                         break;
-                    case 'emailDontExist':
-                        this.emailError = "E-mail não cadastrado";
-                        break;
-                    case 'passwordInvalid':
-                        this.passwordError = "Senha incorreta";
+                    case 'failed':
+                        this.emailError = "E-mail não cadastrado ou senha incorreta";
                         break;
                 }
                 this.isLoading = false;

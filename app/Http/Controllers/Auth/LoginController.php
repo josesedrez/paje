@@ -43,19 +43,11 @@ class LoginController extends Controller
 
     protected function login()
     {
-        $user = User::where('email', request('email'))->first();
-
-        if (is_null($user)) {
-            return "emailDontExist";
+        if (Auth::attempt(['email' => request('email'), 'password' => request('password')])) {
+            return "logged";
         }
 
-//        if (Hash::check(request('password'), $user->password)) {
-            Auth::login($user);
-
-            return "logged";
-//        }
-
-        return "passwordInvalid";
+        return "failed";
     }
 
     protected function logout()
@@ -63,5 +55,10 @@ class LoginController extends Controller
         Auth::logout();
 
         return redirect('/');
+    }
+
+    protected function isRightPassword($password, User $user)
+    {
+        return Hash::check(request('password'), $user->password);
     }
 }
