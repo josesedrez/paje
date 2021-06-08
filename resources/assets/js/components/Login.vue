@@ -74,7 +74,6 @@ export default {
             User.login(payload, response => {
                 switch (response.data) {
                     case 'logged':
-                        // this.$router.push('/');
                         window.location.reload();
                         break;
                     case 'failed':

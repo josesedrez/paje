@@ -84,9 +84,11 @@
                     switch (response.data) {
                         case 'registered':
                             const options = {title: 'Usuário Cadastrado!', size: 'sm'}
-                            this.$dialogs.alert('Sua conta foi registrada com sucesso. Agora tente realizar o login.', options)
-                                .then(this.redirectToHome());
-
+                            this.$dialogs.alert('Sua conta foi registrada com sucesso. Agora tente realizar o login.', options);
+                            this.email = '';
+                            this.name = '';
+                            this.password = '';
+                            this.confirmPassword = '';
                             break;
                         case 'emailAlreadyExist':
                             this.emailError = "E-mail já cadastrado";
@@ -143,9 +145,6 @@
             isValidEmail(email) {
                 const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
                 return re.test(email);
-            },
-            redirectToHome() {
-                this.$router.push('/');
             }
         }
     }

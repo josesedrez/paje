@@ -545,12 +545,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 var baseUrl = '/goals/';
 
-var Goal = function () {
-    function Goal() {
-        _classCallCheck(this, Goal);
+var User = function () {
+    function User() {
+        _classCallCheck(this, User);
     }
 
-    _createClass(Goal, null, [{
+    _createClass(User, null, [{
         key: 'register',
         value: function register(payload, callback) {
             console.log(callback);
@@ -594,10 +594,10 @@ var Goal = function () {
         }
     }]);
 
-    return Goal;
+    return User;
 }();
 
-/* harmony default export */ __webpack_exports__["a"] = (Goal);
+/* harmony default export */ __webpack_exports__["a"] = (User);
 
 /***/ }),
 /* 3 */
@@ -18149,9 +18149,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     components: {
         Loading: __WEBPACK_IMPORTED_MODULE_1_vue_loading_overlay___default.a
     },
+    created: function created() {
+        var _this = this;
+
+        this.isLoading = true;
+
+        __WEBPACK_IMPORTED_MODULE_0__services_User__["a" /* default */].getCurrentUser(function (response) {
+            if (response.data) {
+                _this.$router.push('/');
+            }
+            _this.isLoading = false;
+        });
+    },
     methods: {
         login: function login() {
-            var _this = this;
+            var _this2 = this;
 
             this.resetErrors();
 
@@ -18169,14 +18181,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             __WEBPACK_IMPORTED_MODULE_0__services_User__["a" /* default */].login(payload, function (response) {
                 switch (response.data) {
                     case 'logged':
-                        _this.$router.push('/');
                         window.location.reload();
                         break;
                     case 'failed':
-                        _this.emailError = "E-mail não cadastrado ou senha incorreta";
+                        _this2.emailError = "E-mail não cadastrado ou senha incorreta";
                         break;
                 }
-                _this.isLoading = false;
+                _this2.isLoading = false;
             });
         },
         resetErrors: function resetErrors() {
@@ -18479,20 +18490,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
                 switch (response.data) {
                     case 'registered':
-                        __WEBPACK_IMPORTED_MODULE_0__services_User__["a" /* default */].login(payload, function (response2) {
-                            switch (response2.data) {
-                                case 'logged':
-                                    _this.$router.push('/');
-                                    window.location.reload();
-                                    break;
-                                case 'emailDontExist':
-                                    _this.emailError = "E-mail não cadastrado";
-                                    break;
-                                case 'passwordInvalid':
-                                    _this.passwordError = "Senha incorreta";
-                                    break;
-                            }
-                        });
+                        var options = { title: 'Usuário Cadastrado!', size: 'sm' };
+                        _this.$dialogs.alert('Sua conta foi registrada com sucesso. Agora tente realizar o login.', options);
+                        _this.email = '';
+                        _this.name = '';
+                        _this.password = '';
+                        _this.confirmPassword = '';
                         break;
                     case 'emailAlreadyExist':
                         _this.emailError = "E-mail já cadastrado";
