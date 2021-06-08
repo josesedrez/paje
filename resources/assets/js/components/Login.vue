@@ -46,6 +46,16 @@ export default {
     components: {
         Loading
     },
+    created: function () {
+        this.isLoading = true;
+
+        User.getCurrentUser(response => {
+            if (response.data) {
+                this.$router.push('/');
+            }
+                this.isLoading = false;
+        });
+    },
     methods: {
         login () {
             this.resetErrors();
@@ -64,7 +74,7 @@ export default {
             User.login(payload, response => {
                 switch (response.data) {
                     case 'logged':
-                        this.$router.push('/');
+                        // this.$router.push('/');
                         window.location.reload();
                         break;
                     case 'failed':

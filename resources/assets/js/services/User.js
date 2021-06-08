@@ -2,7 +2,7 @@ import axios from 'axios'
 
 const baseUrl = '/goals/'
 
-export default class Goal {
+export default class User {
     static register (payload, callback) {
         console.log(callback);
 

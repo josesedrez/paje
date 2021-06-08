@@ -83,20 +83,10 @@
 
                     switch (response.data) {
                         case 'registered':
-                            User.login(payload, response2 => {
-                                switch (response2.data) {
-                                    case 'logged':
-                                        this.$router.push('/');
-                                        window.location.reload();
-                                        break;
-                                    case 'emailDontExist':
-                                        this.emailError = "E-mail não cadastrado";
-                                        break;
-                                    case 'passwordInvalid':
-                                        this.passwordError = "Senha incorreta";
-                                        break;
-                                }
-                            });
+                            const options = {title: 'Usuário Cadastrado!', size: 'sm'}
+                            this.$dialogs.alert('Sua conta foi registrada com sucesso. Agora tente realizar o login.', options)
+                                .then(this.redirectToHome());
+
                             break;
                         case 'emailAlreadyExist':
                             this.emailError = "E-mail já cadastrado";
@@ -153,6 +143,9 @@
             isValidEmail(email) {
                 const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
                 return re.test(email);
+            },
+            redirectToHome() {
+                this.$router.push('/');
             }
         }
     }
