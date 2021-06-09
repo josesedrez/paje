@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\User;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
@@ -55,25 +56,33 @@ class RegisterController extends Controller
         ]);
     }
 
-    protected function create(): string
+    protected function create(Request $request): string
     {
-        $user = User::where('email', request('email'))->first();
+        $user = User::where('email', $request['email'])->first();
 
         if (!is_null($user)) {
-            return "emailAlreadyExist";
+            return json_encode([
+                'status' => 'emailAlreadyExist'
+            ]);
         }
 
-        $newUser = User::create([
-            'name' => request('name'),
-            'email' => request('email'),
-            'password' => Hash::make(request('teste')),
-        ]);
+        $userPayload = [
+            'name' => $request['name'],
+            'email' => $request['email'],
+            'password' => Hash::make($request['password']),
+        ];
+
+        $newUser = User::create($userPayload);
 
         if (is_null($newUser)) {
-            return "registerError";
+            return json_encode([
+                'status' => 'registerError'
+            ]);
         }
 
-        return $newUser;
-//        return "registered";
+        return redirect('/');
+        return json_encode([
+            'status' => 'registered'
+        ]);
     }
 }

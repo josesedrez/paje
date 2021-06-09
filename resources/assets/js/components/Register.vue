@@ -6,33 +6,37 @@
         </loading>
 
         <div class="w-3/4 h-full pt-10 justify-center flex-none">
-            <div class="w-full justify-center flex">
-                <input class="h-10 w-2/5" name="email" type="email" v-model="email" placeholder="E-mail">
-            </div>
-            <div class="w-full h-2 justify-center flex">
-                <span class="text-red text-sm font-bold">{{ emailError }}</span>
-            </div>
-            <div class="w-full justify-center flex mt-8">
-                <input class="h-10 w-2/5" name="name" type="text" v-model="name" placeholder="Nome">
-            </div>
-            <div class="w-full h-2 justify-center flex">
-                <span class="text-red text-sm font-bold">{{ nameError }}</span>
-            </div>
-            <div class="w-full justify-center flex mt-8">
-                <input class="h-10 w-2/5" name="password" type="password" v-model="password" placeholder="Senha">
-            </div>
-            <div class="w-full h-2 justify-center flex">
-                <span class="text-red text-sm font-bold">{{ passwordError }}</span>
-            </div>
-            <div class="w-full justify-center flex mt-8">
-                <input class="h-10 w-2/5" name="confirmPassword" type="password" v-model="confirmPassword" placeholder="Confirme a senha">
-            </div>
-            <div class="w-full h-2 justify-center flex">
-                <span class="text-red text-sm font-bold">{{ confirmPasswordError }}</span>
-            </div>
-            <div class="w-full justify-center flex mt-8">
-                <button class="bg-green w-2/5 h-10 text-white font-bold" @click="register()">Cadastrar-se</button>
-            </div>
+            <form @submit="verify" method="POST" action="/register">
+                <input type="hidden" name="_token" value="1nVyve3z4D1XhHpBcwYv5Bhl0hp3N31PfJ787JKG" />
+                <div class="w-full justify-center flex">
+                    <input class="h-10 w-2/5" name="email" type="email" v-model="email" placeholder="E-mail">
+                </div>
+                <div class="w-full h-2 justify-center flex">
+                    <span class="text-red text-sm font-bold">{{ emailError }}</span>
+                </div>
+                <div class="w-full justify-center flex mt-8">
+                    <input class="h-10 w-2/5" name="name" type="text" v-model="name" placeholder="Nome">
+                </div>
+                <div class="w-full h-2 justify-center flex">
+                    <span class="text-red text-sm font-bold">{{ nameError }}</span>
+                </div>
+                <div class="w-full justify-center flex mt-8">
+                    <input class="h-10 w-2/5" name="password" type="password" v-model="password" placeholder="Senha">
+                </div>
+                <div class="w-full h-2 justify-center flex">
+                    <span class="text-red text-sm font-bold">{{ passwordError }}</span>
+                </div>
+                <div class="w-full justify-center flex mt-8">
+                    <input class="h-10 w-2/5" name="confirmPassword" type="password" v-model="confirmPassword" placeholder="Confirme a senha">
+                </div>
+                <div class="w-full h-2 justify-center flex">
+                    <span class="text-red text-sm font-bold">{{ confirmPasswordError }}</span>
+                </div>
+                <div class="w-full justify-center flex mt-8">
+                    <button class="bg-green w-2/5 h-10 text-white font-bold" type="submit">Cadastrar-se</button>
+                </div>
+            </form>
+
         </div>
     </div>
 </template>
@@ -63,43 +67,51 @@
             Loading
         },
         methods: {
-            register () {
+            verify (e) {
                 this.resetErrors();
 
                 if (!this.isValidInputs()) {
-                    return;
+                    e.preventDefault();
                 }
 
-                var payload = {
-                    email: this.email,
-                    name: this.name,
-                    teste: this.password,
-                };
-
-                this.isLoading = true;
-                this.$https.post('/register', payload)
-                    .then((response) => {
-                    console.log(response.data);
-                        // switch (response.data) {
-                        //     case 'registered':
-                        //         const options = {title: 'Usuário Cadastrado!', size: 'sm'}
-                        //         this.$dialogs.alert('Sua conta foi registrada com sucesso. Agora tente realizar o login.', options);
-                        //         // this.email = '';
-                        //         // this.name = '';
-                        //         // this.password = '';
-                        //         // this.confirmPassword = '';
-                        //         this.$router.push('/login');
-                        //         break;
-                        //     case 'emailAlreadyExist':
-                        //         this.emailError = "E-mail já cadastrado";
-                        //         break;
-                        //     case 'registerError':
-                        //         this.emailError = "Houve algum problema durante o cadastro";
-                        //         break;
-                        // }
-
-                        this.isLoading = false;
-                });
+                return true;
+                // var payload = {
+                //     email: this.email,
+                //     name: this.name,
+                //     teste: this.password,
+                // };
+                //
+                // this.isLoading = true;
+                // this.$https.post('/register', payload)
+                //     .then((response) => {
+                //     console.log(response.data);
+                //         switch (response.data.status) {
+                //             case 'registered':
+                //                 // this.$https.post('/login', payload)
+                //                 //     .then((response) => {
+                //                 //
+                //                 //     });
+                //                 // const options = {title: 'Usuário Cadastrado!', size: 'sm'}
+                //                 // this.$dialogs.alert('Sua conta foi registrada com sucesso. Agora tente realizar o login.', options)
+                //                 //     .then(function () {
+                //                 //         window.location.reload();
+                //                 //     });
+                //                 // this.email = '';
+                //                 // this.name = '';
+                //                 // this.password = '';
+                //                 // this.confirmPassword = '';
+                //                 // this.$router.push('/login');
+                //                 break;
+                //             case 'emailAlreadyExist':
+                //                 this.emailError = "E-mail já cadastrado";
+                //                 break;
+                //             case 'registerError':
+                //                 this.emailError = "Houve algum problema durante o cadastro";
+                //                 break;
+                //         }
+                //
+                //         this.isLoading = false;
+                // });
                 // User.register(payload, response => {
                 //     console.log(response);
                 //

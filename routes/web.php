@@ -19,7 +19,7 @@ Route::get('/{any}', function () {
 
 Route::middleware('crypton')->post('/register', 'Auth\RegisterController@create');
 
-Route::post('/login', 'Auth\LoginController@login');
+Route::middleware('crypton')->post('/login', 'Auth\LoginController@login');
 
 Route::post('/logout', 'Auth\LoginController@logout');
 
