@@ -7,6 +7,7 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
@@ -170,7 +171,7 @@ class UserController extends Controller
 
         $decode = base64_decode($exploded[1]);
 
-        $filename = str_random() . '.' . $extension;
+        $filename = Str::random(10) . '.' . $extension;
 
         $path = public_path() . '/images/profiles/' . $filename;
 

@@ -17,7 +17,7 @@ Route::get('/{any}', function () {
     return view('app');
 })->where('any', '.*');
 
-Route::post('/register', 'Auth\RegisterController@create');
+Route::middleware('crypton')->post('/register', 'Auth\RegisterController@create');
 
 Route::post('/login', 'Auth\LoginController@login');
 

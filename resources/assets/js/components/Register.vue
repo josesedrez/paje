@@ -73,33 +73,55 @@
                 var payload = {
                     email: this.email,
                     name: this.name,
-                    password: this.password,
+                    teste: this.password,
                 };
 
                 this.isLoading = true;
+                this.$https.post('/register', payload)
+                    .then((response) => {
+                    console.log(response.data);
+                        // switch (response.data) {
+                        //     case 'registered':
+                        //         const options = {title: 'Usuário Cadastrado!', size: 'sm'}
+                        //         this.$dialogs.alert('Sua conta foi registrada com sucesso. Agora tente realizar o login.', options);
+                        //         // this.email = '';
+                        //         // this.name = '';
+                        //         // this.password = '';
+                        //         // this.confirmPassword = '';
+                        //         this.$router.push('/login');
+                        //         break;
+                        //     case 'emailAlreadyExist':
+                        //         this.emailError = "E-mail já cadastrado";
+                        //         break;
+                        //     case 'registerError':
+                        //         this.emailError = "Houve algum problema durante o cadastro";
+                        //         break;
+                        // }
 
-                User.register(payload, response => {
-                    console.log(response);
-
-                    switch (response.data) {
-                        case 'registered':
-                            const options = {title: 'Usuário Cadastrado!', size: 'sm'}
-                            this.$dialogs.alert('Sua conta foi registrada com sucesso. Agora tente realizar o login.', options);
-                            this.email = '';
-                            this.name = '';
-                            this.password = '';
-                            this.confirmPassword = '';
-                            break;
-                        case 'emailAlreadyExist':
-                            this.emailError = "E-mail já cadastrado";
-                            break;
-                        case 'registerError':
-                            this.emailError = "Houve algum problema durante o cadastro";
-                            break;
-                    }
-
-                    this.isLoading = false;
+                        this.isLoading = false;
                 });
+                // User.register(payload, response => {
+                //     console.log(response);
+                //
+                //     switch (response.data) {
+                //         case 'registered':
+                //             const options = {title: 'Usuário Cadastrado!', size: 'sm'}
+                //             this.$dialogs.alert('Sua conta foi registrada com sucesso. Agora tente realizar o login.', options);
+                //             this.email = '';
+                //             this.name = '';
+                //             this.password = '';
+                //             this.confirmPassword = '';
+                //             break;
+                //         case 'emailAlreadyExist':
+                //             this.emailError = "E-mail já cadastrado";
+                //             break;
+                //         case 'registerError':
+                //             this.emailError = "Houve algum problema durante o cadastro";
+                //             break;
+                //     }
+                //
+                //     this.isLoading = false;
+                // });
             },
             resetErrors() {
                 this.emailError = '';

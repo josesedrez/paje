@@ -6,6 +6,7 @@ export default class User {
     static register (payload, callback) {
         console.log(callback);
 
+
         axios.post('/register', payload).then(callback)
     }
 

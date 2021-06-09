@@ -55,7 +55,7 @@ class RegisterController extends Controller
         ]);
     }
 
-    protected function create()
+    protected function create(): string
     {
         $user = User::where('email', request('email'))->first();
 
@@ -66,13 +66,14 @@ class RegisterController extends Controller
         $newUser = User::create([
             'name' => request('name'),
             'email' => request('email'),
-            'password' => Hash::make(request('password')),
+            'password' => Hash::make(request('teste')),
         ]);
 
         if (is_null($newUser)) {
             return "registerError";
         }
 
-        return "registered";
+        return $newUser;
+//        return "registered";
     }
 }
