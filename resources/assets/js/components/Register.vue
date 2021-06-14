@@ -7,7 +7,8 @@
 
         <div class="w-3/4 h-full pt-10 justify-center flex-none">
             <form @submit="verify" method="POST" action="/register">
-                <input type="hidden" name="_token" value="1nVyve3z4D1XhHpBcwYv5Bhl0hp3N31PfJ787JKG" />
+                <input type="hidden" name="_token" v-bind:value="csrf">
+
                 <div class="w-full justify-center flex">
                     <input class="h-10 w-2/5" name="email" type="email" v-model="email" placeholder="E-mail">
                 </div>
@@ -52,6 +53,9 @@
                 isLoading: false,
                 fullPage: true,
 
+                //csrf token
+                csrf: '',
+
                 email: '',
                 name: '',
                 password: '',
@@ -65,6 +69,12 @@
         },
         components: {
             Loading
+        },
+        created() {
+            this.$https.post('/get-csrf')
+                .then((response) => {
+                    this.csrf = response.data;
+                });
         },
         methods: {
             verify (e) {

@@ -64,6 +64,7 @@ class LoginController extends Controller
 
         if ($this->attemptLogin($request)) {
 //            return $this->sendLoginResponse($request);
+            toastr()->success('Login realizado com sucesso!');
             return "logged";
         }
 

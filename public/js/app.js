@@ -22885,6 +22885,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 
@@ -22895,6 +22896,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         return {
             isLoading: false,
             fullPage: true,
+
+            //csrf token
+            csrf: '',
 
             email: '',
             name: '',
@@ -22911,6 +22915,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     components: {
         Loading: __WEBPACK_IMPORTED_MODULE_1_vue_loading_overlay___default.a
     },
+    created: function created() {
+        var _this = this;
+
+        this.$https.post('/get-csrf').then(function (response) {
+            _this.csrf = response.data;
+        });
+    },
+
     methods: {
         verify: function verify(e) {
             this.resetErrors();
@@ -23065,11 +23077,8 @@ var render = function() {
             },
             [
               _c("input", {
-                attrs: {
-                  type: "hidden",
-                  name: "_token",
-                  value: "1nVyve3z4D1XhHpBcwYv5Bhl0hp3N31PfJ787JKG"
-                }
+                attrs: { type: "hidden", name: "_token" },
+                domProps: { value: _vm.csrf }
               }),
               _vm._v(" "),
               _c("div", { staticClass: "w-full justify-center flex" }, [

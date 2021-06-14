@@ -31,6 +31,8 @@ Route::post('/user-evaluations-count', 'UserController@getUserEvaluationsCount')
 
 Route::post('/change-profile', 'UserController@changeProfile');
 
+Route::post('/get-csrf', 'FormController@getCsrfToken');
+
 //Auth::routes();
 
 //Route::get('/home', 'HomeController@index')->name('home');

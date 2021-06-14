@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Auth;
 use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use TJGazel\Toastr\Facades\Toastr;
 
 class RegisterController extends Controller
 {
@@ -61,9 +63,8 @@ class RegisterController extends Controller
         $user = User::where('email', $request['email'])->first();
 
         if (!is_null($user)) {
-            return json_encode([
-                'status' => 'emailAlreadyExist'
-            ]);
+            toastr()->error('Este e-mail já foi cadastrado.');
+            return redirect('/register');
         }
 
         $userPayload = [
@@ -75,14 +76,13 @@ class RegisterController extends Controller
         $newUser = User::create($userPayload);
 
         if (is_null($newUser)) {
-            return json_encode([
-                'status' => 'registerError'
-            ]);
+            toastr()->error('Ocorreu algum erro no cadastro.');
+            return redirect('/register');
         }
 
+        Auth::login($newUser);
+
+        toastr()->success('Cadastro e Login realizados com sucesso!');
         return redirect('/');
-        return json_encode([
-            'status' => 'registered'
-        ]);
     }
 }

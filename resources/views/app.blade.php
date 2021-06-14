@@ -8,6 +8,7 @@
         <title>Laravel</title>
         <link href="https://fonts.googleapis.com/css2?family=Open+Sans:400,700" rel="stylesheet">
         <link rel="stylesheet" href="/css/app.css">
+        @toastr_css
     </head>
     <body class="font-sans bg-purple-dark text-white">
         <div id="app">
@@ -76,4 +77,7 @@
 
         <script src="/js/app.js"></script>
     </body>
+    @jquery
+    @toastr_js
+    @toastr_render
 </html>
