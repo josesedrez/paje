@@ -6,6 +6,7 @@ import NotFound from './components/NotFound';
 import Users from './components/Users';
 import Login from './components/Login';
 import Register from './components/Register';
+import Categories from "./components/Categories";
 
 export default {
     mode: 'history',
@@ -42,6 +43,10 @@ export default {
         {
             path: '/register',
             component: Register
+        },
+        {
+            path: '/categories',
+            component: Categories
         }
     ]
 }

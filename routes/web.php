@@ -27,7 +27,15 @@ Route::post('/current-user', 'UserController@getCurrentUser');
 
 Route::post('/all-users', 'UserController@getAllUsers');
 
+Route::middleware('crypton')->post('/all-categories', 'CategoryController@getAllCategories');
+
 Route::post('/user-evaluations-count', 'UserController@getUserEvaluationsCount');
+
+Route::middleware('crypton')->post('/add-category', 'CategoryController@addNewCategory');
+
+Route::middleware('crypton')->post('/delete-category', 'CategoryController@deleteCategory');
+
+Route::middleware('crypton')->post('/edit-category', 'CategoryController@editCategory');
 
 Route::post('/change-profile', 'UserController@changeProfile');
 

@@ -49,6 +49,9 @@
 
                             <ul class="list-reset">
                                 <li class="text-sm leading-loose"><router-link class="text-white" active-class="font-bold" to="/" exact>Início</router-link></li>
+                                @if(Auth::check() && Auth::user()->is_admin)
+                                    <li class="text-sm leading-loose"><router-link class="text-white" active-class="font-bold" to="/categories">Categorias</router-link></li>
+                                @endif
                                 <li class="text-sm leading-loose"><router-link class="text-white" active-class="font-bold" to="/evaluations">Avaliações</router-link></li>
                                 <li class="text-sm leading-loose"><router-link class="text-white" active-class="font-bold" to="/games">Jogos</router-link></li>
                                 <li class="text-sm leading-loose"><router-link class="text-white" active-class="font-bold" to="/users">Usuários</router-link></li>
