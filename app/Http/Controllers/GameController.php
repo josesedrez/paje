@@ -6,6 +6,8 @@ use App\Category;
 use App\Game;
 use App\Http\Requests\GameValidation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class GameController extends Controller
 {
@@ -147,5 +149,46 @@ class GameController extends Controller
         $game->delete();
 
         return redirect()->back();
+    }
+
+    public function getAllGames() {
+        return Game::orderBy('title')->get();
+    }
+
+    public function addNewGame(Request $request) {
+        return Game::create([
+            'title' => $request['title'],
+            'parental_rating' => $request['parentalRating'],
+            'cover' => $request['cover'],
+            'description' => $request['description'],
+            'grade' => 0
+        ]);
+    }
+
+    public function loadCover(Request $request)
+    {
+        $image = $request['image'];
+
+        $exploded = explode(',', $image);
+
+        if (str_contains($exploded[0], 'png')) {
+            $extension = 'png';
+        } else if (str_contains($exploded[0], 'jpg')) {
+            $extension = 'jpg';
+        } else if (str_contains($exploded[0], 'jpeg')) {
+            $extension = 'jpg';
+        } else {
+            return 'invalidExtension';
+        }
+
+        $decode = base64_decode($exploded[1]);
+
+        $filename = Str::random(10) . '.' . $extension;
+
+        $path = public_path() . '/images/covers/' . $filename;
+
+        file_put_contents($path, $decode);
+
+        return $filename;
     }
 }

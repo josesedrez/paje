@@ -51,6 +51,20 @@
         created: function () {
             this.isLoading = true;
 
+            this.$https.post('/current-user')
+                .then((response) => {
+                    console.log(response.data);
+                    if (response.data) {
+                        if (!response.data.is_admin) {
+                            this.$router.push('/notFound');
+                            this.isLoading = false;
+                        }
+                    } else {
+                        this.$router.push('/notFound');
+                        this.isLoading = false;
+                    }
+            });
+
             this.$https.post('/all-categories')
                 .then((response) => {
                 console.log(response.data);

@@ -29,7 +29,13 @@ Route::post('/all-users', 'UserController@getAllUsers');
 
 Route::middleware('crypton')->post('/all-categories', 'CategoryController@getAllCategories');
 
+Route::middleware('crypton')->post('/all-games', 'GameController@getAllGames');
+
+Route::middleware('crypton')->post('/load-cover', 'GameController@loadCover');
+
 Route::post('/user-evaluations-count', 'UserController@getUserEvaluationsCount');
+
+Route::middleware('crypton')->post('/add-game', 'GameController@addNewGame');
 
 Route::middleware('crypton')->post('/add-category', 'CategoryController@addNewCategory');
 
