@@ -6258,6 +6258,14 @@ a {
   opacity: 1;
 }
 
+.min-width {
+  min-width: 850px;
+}
+
+.min-width-header {
+  min-width: 970px;
+}
+
 @media (min-width: 576px) {
   .sm\:list-reset {
     list-style: none;

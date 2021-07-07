@@ -14,7 +14,7 @@
                     <!--header-->
                     <div class="flex items-start justify-between p-5 border-b border-solid border-purple-darker rounded-t">
                         <h3 class="text-3xl font-semibold">
-                            Modal Title
+                            Cadastrar Jogo
                         </h3>
                         <button class="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none" v-on:click="toggleCreateModal()">
                           <span class="bg-transparent text-white opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
@@ -80,7 +80,7 @@
                     <!--header-->
                     <div class="flex items-start justify-between p-5 border-b border-solid border-purple-darker rounded-t">
                         <h3 class="text-3xl font-semibold">
-                            Modal Title
+                            Editar Jogo
                         </h3>
                         <button class="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none" v-on:click="toggleEditModal()">
                           <span class="bg-transparent text-white opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
@@ -105,7 +105,7 @@
                                 </select>
                             </div>
                             <div class="w-full justify-center flex mt-10 mb-6">
-                                <input type="fileEdit"  accept="image/*" name="image" id="fileEdit"  @change="loadFile" style="display: none;">
+                                <input type="file"  accept="image/*" name="image" id="fileEdit"  @change="loadFile" style="display: none;">
                                 <div class="image-container">
                                     <p><label for="fileEdit" style="cursor: pointer;">
                                         <img class="h-48 w-32 image" :src="'images/covers/' + editingGameCover">
@@ -201,6 +201,7 @@ export default {
             newGameCover: 'default_cover.png',
             newGameParentalRating: 0,
 
+            editingGameId: 0,
             editingGameTitle: '',
             editingGameDescription: '',
             editingGameCover: 'default_cover.png',
@@ -217,7 +218,7 @@ export default {
     created: function () {
         this.isLoading = true;
 
-        this.$https.post('/all-games')
+        this.$https.post('/current-user')
             .then((response) => {
                 if (response.data) {
                     if (response.data.is_admin) {
@@ -292,64 +293,77 @@ export default {
                 });
         },
         prepareGameEdit(game) {
+            this.editingGameId = game.id;
             this.editingGameTitle = game.title;
             this.editingGameDescription = game.description;
             this.editingGameCover = game.cover;
             this.editingGameParentalRating = game.parental_rating;
             this.toggleEditModal();
         },
-        prepareGameCategoriesEdit(category) {
-            console.log('FOI?');
-            this.editingCategory = category.name;
-            this.editingCategoryId = category.id;
-        },
+        // prepareGameCategoriesEdit(category) {
+        //     console.log('FOI?');
+        //     this.editingCategory = category.name;
+        //     this.editingCategoryId = category.id;
+        // },
         cancelGameEdit() {
-            this.editingCategory = '';
-            this.editingCategoryId = 0;
+            this.editingGameId = 0;
+            this.editingGameTitle = '';
+            this.editingGameDescription = '';
+            this.editingGameCover = '';
+            this.editingGameParentalRating = 0;
         },
         editGame() {
             this.isLoading = true;
 
             let payload = {
-                category: category.id,
-                newName: this.editingCategory
+                game: this.editingGameId,
+                newTitle: this.editingGameTitle,
+                newCover: this.editingGameCover,
+                newParentalRating: this.editingGameParentalRating,
+                newDescription: this.editingGameDescription,
             };
 
-            this.$https.post('/edit-category', payload)
+            this.$https.post('/edit-game', payload)
                 .then((response) => {
                     if (response.data === 'failed') {
                         this.isLoading = false;
                         return
                     }
 
-                    this.categories.forEach(function (currentCategory, index, categories) {
-                        if (currentCategory.id === category.id) {
-                            categories[index].name = response.data.name;
+                    const gameId = this.editingGameId;
+
+                    this.games.forEach(function (currentGame, index, games) {
+                        if (currentGame.id === gameId) {
+                            games[index].title = response.data.title;
+                            games[index].cover = response.data.cover;
+                            games[index].parental_rating = response.data.parental_rating;
+                            games[index].description = response.data.description;
                         }
                     });
 
-                    this.cancelCategoryEdit();
+                    this.toggleEditModal();
+                    this.cancelGameEdit();
 
                     this.isLoading = false;
                 });
         },
-        deleteGame(category) {
+        deleteGame(game) {
             this.isLoading = true;
 
             let payload = {
-                category: category.id
+                game: game.id
             };
 
-            this.$https.post('/delete-category', payload)
+            this.$https.post('/delete-game', payload)
                 .then((response) => {
                     if (response.data !== 'deleted') {
                         this.isLoading = false;
                         return
                     }
 
-                    this.categories.forEach(function (currentCategory, index, categories) {
-                        if (currentCategory.id === category.id) {
-                            categories.splice(index, 1);
+                    this.games.forEach(function (currentGame, index, games) {
+                        if (currentGame.id === game.id) {
+                            games.splice(index, 1);
                         }
                     });
 
@@ -379,7 +393,10 @@ export default {
                             this.$dialogs.alert('Tente utilizar uma imagem com extensão .png ou .jpg', options)
                             break;
                         default:
-                            this.newGameCover = response.data;
+                            if (this.showCreateModal)
+                                this.newGameCover = response.data;
+                            if (this.showEditModal)
+                                this.editingGameCover = response.data;
                             this.isLoading = false;
                     }
                 });

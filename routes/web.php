@@ -23,29 +23,36 @@ Route::middleware('crypton')->post('/login', 'Auth\LoginController@login');
 
 Route::post('/logout', 'Auth\LoginController@logout');
 
-Route::post('/current-user', 'UserController@getCurrentUser');
+Route::post('/change-profile', 'UserController@changeProfile');
 
-Route::post('/all-users', 'UserController@getAllUsers');
-
-Route::middleware('crypton')->post('/all-categories', 'CategoryController@getAllCategories');
-
-Route::middleware('crypton')->post('/all-games', 'GameController@getAllGames');
+Route::post('/get-csrf', 'FormController@getCsrfToken');
 
 Route::middleware('crypton')->post('/load-cover', 'GameController@loadCover');
 
 Route::post('/user-evaluations-count', 'UserController@getUserEvaluationsCount');
 
+// USERS
+Route::middleware('crypton')->post('/current-user', 'UserController@getCurrentUser');
+
+Route::post('/all-users', 'UserController@getAllUsers');
+
+// GAMES
+Route::middleware('crypton')->post('/all-games', 'GameController@getAllGames');
+
 Route::middleware('crypton')->post('/add-game', 'GameController@addNewGame');
+
+Route::middleware('crypton')->post('/delete-game', 'GameController@deleteGame');
+
+Route::middleware('crypton')->post('/edit-game', 'GameController@editGame');
+
+// CATEGORIES
+Route::middleware('crypton')->post('/all-categories', 'CategoryController@getAllCategories');
 
 Route::middleware('crypton')->post('/add-category', 'CategoryController@addNewCategory');
 
 Route::middleware('crypton')->post('/delete-category', 'CategoryController@deleteCategory');
 
 Route::middleware('crypton')->post('/edit-category', 'CategoryController@editCategory');
-
-Route::post('/change-profile', 'UserController@changeProfile');
-
-Route::post('/get-csrf', 'FormController@getCsrfToken');
 
 //Auth::routes();
 

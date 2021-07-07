@@ -13,7 +13,7 @@
     <body class="font-sans bg-purple-dark text-white">
         <div id="app">
             <div class="container px-5">
-                <header class="mb-6 w-full bg-purple rounded-lg flex">
+                <header class="mb-6 w-full min-width-header bg-purple rounded-lg flex">
                     <div class="w-1/5">
                         <h1>
                             <img alt="Paje" src="/images/logo.png" width="100%">
@@ -71,7 +71,7 @@
 
                     </aside>
 
-                    <div class="primary flex-1 w-4/5 flex-1 ml-3 p-3 bg-purple rounded-lg justify-center align-content-center align-items-center">
+                    <div class="primary flex-1 w-4/5 min-width flex-1 ml-3 p-3 bg-purple rounded-lg justify-center align-content-center align-items-center">
                         <router-view></router-view>
                     </div>
                 </main>
