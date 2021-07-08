@@ -149,7 +149,7 @@
             <h1>Jogos</h1>
         </div>
 
-        <div class="w-full justify-center flex mt-10 mb-6">
+        <div v-if="isAdmin" class="w-full justify-center flex mt-10 mb-6">
             <button class="bg-green text-white active:bg-green-dark font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" v-on:click="toggleCreateModal()">
                 Cadastrar Jogo
             </button>
@@ -172,9 +172,9 @@
                 <p>Categorias: -</p>
             </div>
             <div class="w-2/5">
-                <button class="bg-purple w-1/4 text-white h-8 font-bold rounded-lg" v-on:click="prepareGameCategoriesEdit(game)">Categorias</button>
-                <button class="bg-purple w-1/4 text-white h-8 font-bold rounded-lg" v-on:click="prepareGameEdit(game)">Editar</button>
-                <button class="bg-purple w-1/4 text-white h-8 font-bold rounded-lg" v-on:click="deleteGame(game)">Excluir</button>
+                <button v-if="isAdmin" class="bg-purple w-1/4 text-white h-8 font-bold rounded-lg" v-on:click="prepareGameCategoriesEdit(game)">Categorias</button>
+                <button v-if="isAdmin" class="bg-purple w-1/4 text-white h-8 font-bold rounded-lg" v-on:click="prepareGameEdit(game)">Editar</button>
+                <button v-if="isAdmin" class="bg-purple w-1/4 text-white h-8 font-bold rounded-lg" v-on:click="deleteGame(game)">Excluir</button>
             </div>
         </div>
 

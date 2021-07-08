@@ -24078,22 +24078,24 @@ var render = function() {
       _vm._v(" "),
       _vm._m(0),
       _vm._v(" "),
-      _c("div", { staticClass: "w-full justify-center flex mt-10 mb-6" }, [
-        _c(
-          "button",
-          {
-            staticClass:
-              "bg-green text-white active:bg-green-dark font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150",
-            attrs: { type: "button" },
-            on: {
-              click: function($event) {
-                return _vm.toggleCreateModal()
-              }
-            }
-          },
-          [_vm._v("\n                Cadastrar Jogo\n            ")]
-        )
-      ]),
+      _vm.isAdmin
+        ? _c("div", { staticClass: "w-full justify-center flex mt-10 mb-6" }, [
+            _c(
+              "button",
+              {
+                staticClass:
+                  "bg-green text-white active:bg-green-dark font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150",
+                attrs: { type: "button" },
+                on: {
+                  click: function($event) {
+                    return _vm.toggleCreateModal()
+                  }
+                }
+              },
+              [_vm._v("\n                Cadastrar Jogo\n            ")]
+            )
+          ])
+        : _vm._e(),
       _vm._v(" "),
       _c("div", { staticClass: "w-full justify-center flex mt-10 mb-6" }, [
         _c("input", {
@@ -24154,47 +24156,53 @@ var render = function() {
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "w-2/5" }, [
-            _c(
-              "button",
-              {
-                staticClass:
-                  "bg-purple w-1/4 text-white h-8 font-bold rounded-lg",
-                on: {
-                  click: function($event) {
-                    return _vm.prepareGameCategoriesEdit(game)
-                  }
-                }
-              },
-              [_vm._v("Categorias")]
-            ),
+            _vm.isAdmin
+              ? _c(
+                  "button",
+                  {
+                    staticClass:
+                      "bg-purple w-1/4 text-white h-8 font-bold rounded-lg",
+                    on: {
+                      click: function($event) {
+                        return _vm.prepareGameCategoriesEdit(game)
+                      }
+                    }
+                  },
+                  [_vm._v("Categorias")]
+                )
+              : _vm._e(),
             _vm._v(" "),
-            _c(
-              "button",
-              {
-                staticClass:
-                  "bg-purple w-1/4 text-white h-8 font-bold rounded-lg",
-                on: {
-                  click: function($event) {
-                    return _vm.prepareGameEdit(game)
-                  }
-                }
-              },
-              [_vm._v("Editar")]
-            ),
+            _vm.isAdmin
+              ? _c(
+                  "button",
+                  {
+                    staticClass:
+                      "bg-purple w-1/4 text-white h-8 font-bold rounded-lg",
+                    on: {
+                      click: function($event) {
+                        return _vm.prepareGameEdit(game)
+                      }
+                    }
+                  },
+                  [_vm._v("Editar")]
+                )
+              : _vm._e(),
             _vm._v(" "),
-            _c(
-              "button",
-              {
-                staticClass:
-                  "bg-purple w-1/4 text-white h-8 font-bold rounded-lg",
-                on: {
-                  click: function($event) {
-                    return _vm.deleteGame(game)
-                  }
-                }
-              },
-              [_vm._v("Excluir")]
-            )
+            _vm.isAdmin
+              ? _c(
+                  "button",
+                  {
+                    staticClass:
+                      "bg-purple w-1/4 text-white h-8 font-bold rounded-lg",
+                    on: {
+                      click: function($event) {
+                        return _vm.deleteGame(game)
+                      }
+                    }
+                  },
+                  [_vm._v("Excluir")]
+                )
+              : _vm._e()
           ])
         ])
       })
