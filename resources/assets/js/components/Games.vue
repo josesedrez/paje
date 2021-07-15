@@ -5,7 +5,184 @@
                  :is-full-page="fullPage">
         </loading>
 
-<!--        MODAL DE CADASTRO-->
+<!--        MODAL DE EXCLUSÃO-->
+        <div v-if="showDeleteModal" class="w-full grid justify-items-center text-white overflow-x-hidden overflow-y-auto over fixed inset-0 z-50 outline-none focus:outline-none justify-center items-center flex-none full-screen">
+            <div class="relative w-auto my-6 mx-auto max-w-6xl flex">
+                <div class="w-1/5"></div>
+                <!--content-->
+                <div class="border-0 rounded-lg shadow-lg relative flex-none flex-col w-3/5 full-screen bg-purple outline-none focus:outline-none">
+                    <!--header-->
+                    <div class="flex items-start justify-between p-5 border-b border-solid border-purple-darker rounded-t">
+                        <h3 class="text-3xl font-semibold">
+                            Excluir Jogo
+                        </h3>
+                        <button class="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none" v-on:click="toggleDeleteModal()">
+                          <span class="bg-transparent text-white opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
+                            ×
+                          </span>
+                        </button>
+                    </div>
+                    <!--body-->
+                    <div class="w-full relative p-6 flex-none">
+                        <div class="flex-auto">
+                            <p>Tem certeza que deseja exluir este jogo?</p>
+                        </div>
+                    </div>
+                    <!--footer-->
+                    <div class="flex items-center justify-end p-6 border-t border-solid border-purple-darker rounded-b">
+                        <button class="text-white bg-transparent border border-solid border-red-500 hover:bg-red-500 hover:text-white active:bg-red-600 font-bold uppercase text-sm px-6 py-3 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" v-on:click="toggleDeleteModal()">
+                            Cancelar
+                        </button>
+                        <button class="text-white background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" v-on:click="deleteGame(deletingGameId)">
+                            Excluir
+                        </button>
+                    </div>
+                </div>
+                <div class="w-1/5"></div>
+            </div>
+        </div>
+        <div v-if="showDeleteModal" class="opacity-25 fixed inset-0 z-40 bg-black full-screen"></div>
+
+
+        <!--        MODAL DE AVALIAÇÃO-->
+        <div v-if="showEvaluationModal" class="w-full grid justify-items-center text-white overflow-x-hidden overflow-y-auto over fixed inset-0 z-50 outline-none focus:outline-none justify-center items-center flex-none full-screen">
+            <div class="relative w-auto my-6 mx-auto max-w-6xl flex">
+                <div class="w-1/5"></div>
+                <!--content-->
+                <div class="border-0 rounded-lg shadow-lg relative flex-none flex-col w-3/5 full-screen bg-purple outline-none focus:outline-none">
+                    <!--header-->
+                    <div class="flex items-start justify-between p-5 border-b border-solid border-purple-darker rounded-t">
+                        <h3 class="text-3xl font-semibold">
+                            Avaliar Jogo
+                        </h3>
+                        <button class="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none" v-on:click="toggleEvaluationModal()">
+                          <span class="bg-transparent text-white opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
+                            ×
+                          </span>
+                        </button>
+                    </div>
+                    <!--body-->
+                    <div class="w-full relative p-6 flex-none">
+                        <div class="width-high flex-auto">
+                            <div class="w-full justify-center flex mt-10 mb-6">
+                                <input class="h-10" type="text" v-model="newEvaluationTitle" placeholder="Título do Jogo">
+                            </div>
+                            <div class="w-full justify-center flex mt-10 mb-6">
+                                <textarea cols="30" rows="10" required autofocus placeholder="Descrição da Avaliação" v-model="newEvaluationDescription"></textarea>
+                            </div>
+
+                            <div class="w-full justify-center flex mt-10">
+                                <h2>Notas Técnicas</h2>
+                            </div>
+                            <div class="w-full justify-center flex mb-6">
+                                <div class="w-1/3">
+                                    <div class="w-full justify-center flex mt-10">
+                                        <label>Desafio</label>
+                                    </div>
+                                    <div class="w-full justify-center flex mb-6">
+                                        <p>0</p>
+                                        <input type="range" v-model="newEvaluationGMChallenge">
+                                        <p>100</p>
+                                    </div>
+
+                                    <div class="w-full justify-center flex mt-10">
+                                        <label>Jogabilidade</label>
+                                    </div>
+                                    <div class="w-full justify-center flex mb-6">
+                                        <p>0</p>
+                                        <input type="range" v-model="newEvaluationGMControl">
+                                        <p>100</p>
+                                    </div>
+
+                                    <div class="w-full justify-center flex mt-10">
+                                        <label>Objetivo</label>
+                                    </div>
+                                    <div class="w-full justify-center flex mb-6">
+                                        <p>0</p>
+                                        <input type="range" v-model="newEvaluationGMObjective">
+                                        <p>100</p>
+                                    </div>
+
+                                    <div class="w-full justify-center flex mt-10">
+                                        <label>Regras</label>
+                                    </div>
+                                    <div class="w-full justify-center flex mb-6">
+                                        <p>0</p>
+                                        <input type="range" v-model="newEvaluationGMRule">
+                                        <p>100</p>
+                                    </div>
+                                </div>
+
+                                <div class="w-1/3">
+                                    <div class="w-full justify-center flex mt-10">
+                                        <label>Cenário</label>
+                                    </div>
+                                    <div class="w-full justify-center flex mb-6">
+                                        <p>0</p>
+                                        <input type="range" v-model="newEvaluationSTScenario">
+                                        <p>100</p>
+                                    </div>
+
+                                    <div class="w-full justify-center flex mt-10">
+                                        <label>Construção de Personagem</label>
+                                    </div>
+                                    <div class="w-full justify-center flex mb-6">
+                                        <p>0</p>
+                                        <input type="range" v-model="newEvaluationSTCharacterBuilding">
+                                        <p>100</p>
+                                    </div>
+
+                                    <div class="w-full justify-center flex mt-10">
+                                        <label>Enredo</label>
+                                    </div>
+                                    <div class="w-full justify-center flex mb-6">
+                                        <p>0</p>
+                                        <input type="range" v-model="newEvaluationSTPlot">
+                                        <p>100</p>
+                                    </div>
+                                </div>
+
+                                <div class="w-1/3">
+                                    <div class="w-full justify-center flex mt-10">
+                                        <label>Gráfico</label>
+                                    </div>
+                                    <div class="w-full justify-center flex mb-6">
+                                        <p>0</p>
+                                        <input type="range" v-model="newEvaluationAVGraphic">
+                                        <p>100</p>
+                                    </div>
+
+                                    <div class="w-full justify-center flex mt-10">
+                                        <label>Áudio</label>
+                                    </div>
+                                    <div class="w-full justify-center flex mb-6">
+                                        <p>0</p>
+                                        <input type="range" v-model="newEvaluationAVAudio">
+                                        <p>100</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--footer-->
+                    <div class="flex items-center justify-end p-6 border-t border-solid border-purple-darker rounded-b">
+                        <button class="text-white bg-transparent border border-solid border-red-500 hover:bg-red-500 hover:text-white active:bg-red-600 font-bold uppercase text-sm px-6 py-3 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" v-on:click="toggleEvaluationModal()">
+                            Fechar
+                        </button>
+                        <button class="text-white background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" v-on:click="evaluateGame()">
+                            Avaliar Jogo
+                        </button>
+                    </div>
+                </div>
+                <div class="w-1/5"></div>
+            </div>
+        </div>
+        <div v-if="showEvaluationModal" class="opacity-25 fixed inset-0 z-40 bg-black full-screen"></div>
+
+
+
+
+        <!--        MODAL DE CADASTRO-->
         <div v-if="showCreateModal" class="w-full grid justify-items-center text-white overflow-x-hidden overflow-y-auto over fixed inset-0 z-50 outline-none focus:outline-none justify-center items-center flex-none full-screen">
             <div class="relative w-auto my-6 mx-auto max-w-6xl flex">
                 <div class="w-1/5"></div>
@@ -70,6 +247,7 @@
                 <div class="w-1/5"></div>
             </div>
         </div>
+        <div v-if="showCreateModal" class="opacity-25 fixed inset-0 z-40 bg-black full-screen"></div>
 
 <!--        MODAL DE EDIÇÃO-->
         <div v-if="showEditModal" class="w-full grid justify-items-center text-white overflow-x-hidden overflow-y-auto over fixed inset-0 z-50 outline-none focus:outline-none justify-center items-center flex-none full-screen">
@@ -136,14 +314,10 @@
                 <div class="w-1/5"></div>
             </div>
         </div>
+        <div v-if="showEditModal" class="opacity-25 fixed inset-0 z-40 bg-black full-screen"></div>
 
 
 
-
-
-
-
-        <div v-if="showCreateModal" class="opacity-25 fixed inset-0 z-40 bg-black full-screen"></div>
 
         <div class="text-center">
             <h1>Jogos</h1>
@@ -171,10 +345,16 @@
                 <p>Descrição: {{game.description}}</p>
                 <p>Categorias: -</p>
             </div>
-            <div class="w-2/5">
-                <button v-if="isAdmin" class="bg-purple w-1/4 text-white h-8 font-bold rounded-lg" v-on:click="prepareGameCategoriesEdit(game)">Categorias</button>
-                <button v-if="isAdmin" class="bg-purple w-1/4 text-white h-8 font-bold rounded-lg" v-on:click="prepareGameEdit(game)">Editar</button>
-                <button v-if="isAdmin" class="bg-purple w-1/4 text-white h-8 font-bold rounded-lg" v-on:click="deleteGame(game)">Excluir</button>
+            <div class="w-2/5 flex-none">
+                <div class="w-full mb-6">
+                    <button v-if="isAdmin" class="bg-purple w-1/4 text-white h-8 font-bold rounded-lg" v-on:click="prepareGameCategoriesEdit(game)">Categorias</button>
+                    <button v-if="isAdmin" class="bg-purple w-1/4 text-white h-8 font-bold rounded-lg" v-on:click="prepareGameEdit(game)">Editar</button>
+                    <button v-if="isAdmin" class="bg-purple w-1/4 text-white h-8 font-bold rounded-lg" v-on:click="prepareGameDelete(game)">Excluir</button>
+                </div>
+                <div class="w-full">
+                    <button class="bg-purple w-2/5 text-white h-8 font-bold rounded-lg" v-on:click="">Ver Detalhes</button>
+                    <button class="bg-purple w-2/5 text-white h-8 font-bold rounded-lg" v-on:click="prepareEvaluation(game)">Avaliar</button>
+                </div>
             </div>
         </div>
 
@@ -184,7 +364,7 @@
 <script>
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/vue-loading.css';
-import User from "../services/User";
+import axios from 'axios';
 
 export default {
     data() {
@@ -193,6 +373,8 @@ export default {
             fullPage: true,
             showCreateModal: false,
             showEditModal: false,
+            showDeleteModal: false,
+            showEvaluationModal: false,
 
             isAdmin: false,
 
@@ -206,6 +388,26 @@ export default {
             editingGameDescription: '',
             editingGameCover: 'default_cover.png',
             editingGameParentalRating: 0,
+
+            deletingGameId: 0,
+            evaluatingGameId: 0,
+
+
+            newEvaluationTitle: '',
+            newEvaluationDescription: '',
+
+            newEvaluationGMObjective: 50,
+            newEvaluationGMChallenge: 50,
+            newEvaluationGMRule: 50,
+            newEvaluationGMControl: 50,
+
+            newEvaluationSTScenario: 50,
+            newEvaluationSTCharacterBuilding: 50,
+            newEvaluationSTPlot: 50,
+
+            newEvaluationAVGraphic: 50,
+            newEvaluationAVAudio: 50,
+
 
             searchGameTitle: '',
 
@@ -262,6 +464,12 @@ export default {
         toggleEditModal: function(){
             this.showEditModal = !this.showEditModal;
         },
+        toggleDeleteModal: function(){
+            this.showDeleteModal = !this.showDeleteModal;
+        },
+        toggleEvaluationModal: function(){
+            this.showEvaluationModal = !this.showEvaluationModal;
+        },
         addNewGame() {
             this.isLoading = true;
 
@@ -292,6 +500,34 @@ export default {
                     this.isLoading = false;
                 });
         },
+        evaluateGame() {
+            this.isLoading = true;
+
+            let payload = {
+                gameId: this.evaluatingGameId,
+                title: this.newEvaluationTitle,
+                description: this.newEvaluationDescription,
+                objective: this.newEvaluationGMObjective,
+                challenge: this.newEvaluationGMChallenge,
+                rule: this.newEvaluationGMRule,
+                control: this.newEvaluationGMControl,
+                scenario: this.newEvaluationSTScenario,
+                characterBuilding: this.newEvaluationSTCharacterBuilding,
+                plot: this.newEvaluationSTPlot,
+                graphic: this.newEvaluationAVGraphic,
+                audio: this.newEvaluationAVAudio,
+            };
+
+            axios.post('/add-evaluation', payload)
+                .then((response) => {
+                    if (response.data === 'evaluated') {
+                        this.$router.push('/evaluations');
+                    }
+
+                    this.toggleEvaluationModal();
+                    this.isLoading = false;
+                });
+        },
         prepareGameEdit(game) {
             this.editingGameId = game.id;
             this.editingGameTitle = game.title;
@@ -299,6 +535,14 @@ export default {
             this.editingGameCover = game.cover;
             this.editingGameParentalRating = game.parental_rating;
             this.toggleEditModal();
+        },
+        prepareGameDelete(game) {
+            this.deletingGameId = game.id;
+            this.toggleDeleteModal();
+        },
+        prepareEvaluation(game) {
+            this.evaluatingGameId = game.id;
+            this.toggleEvaluationModal();
         },
         // prepareGameCategoriesEdit(category) {
         //     console.log('FOI?');
@@ -347,11 +591,11 @@ export default {
                     this.isLoading = false;
                 });
         },
-        deleteGame(game) {
+        deleteGame(gameId) {
             this.isLoading = true;
 
             let payload = {
-                game: game.id
+                game: gameId
             };
 
             this.$https.post('/delete-game', payload)
@@ -362,11 +606,12 @@ export default {
                     }
 
                     this.games.forEach(function (currentGame, index, games) {
-                        if (currentGame.id === game.id) {
+                        if (currentGame.id === gameId) {
                             games.splice(index, 1);
                         }
                     });
 
+                    this.toggleDeleteModal();
                     this.isLoading = false;
                 });
         },

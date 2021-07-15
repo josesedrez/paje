@@ -43,8 +43,8 @@ class GameController extends Controller
     }
 
     public function deleteGame(Request $request) {
-        $category = Game::find($request['game']);
-        $category->delete();
+        $game = Game::find($request['game']);
+        $game->delete();
 
         return 'deleted';
     }

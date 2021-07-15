@@ -4,179 +4,193 @@ namespace App\Http\Controllers;
 
 use App\AudioVisual;
 use App\Evaluation;
+use App\Game;
 use App\GameMechanic;
 use App\Http\Requests\EvaluationValidation;
 use App\Story;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 
 class EvaluationController extends Controller
 {
-
-    public function __construct()
+    public function getAllEvaluations(Request $request)
     {
-        $this->middleware('auth')->except(['show','list']);
-    }
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        $evaluations = Evaluation::all();
+        $evaluations = Evaluation::orderBy('title')->get();
 
-        return view('evaluations.index', compact('evaluations'));
-    }
+        $response = new Collection();
 
-    public function list(User $user = null)
-    {
-        $evaluations = Evaluation::all()->sortByDesc('updated_at');
-        if ($user) {
-            $evaluations = Evaluation::all()->where('user_id',$user->id)->sortByDesc('updated_at');
+        foreach ($evaluations as $evaluation) {
+            $gm = $evaluation->gameMechanic;
+            $st = $evaluation->story;
+            $av = $evaluation->audioVisual;
+
+            $item = new \stdClass();
+            $item->id = $evaluation->id;
+            $item->title = $evaluation->title;
+            $item->grade = $evaluation->grade;
+            $item->description = $evaluation->description;
+            $item->objective = $gm->objective_grade;
+            $item->challenge = $gm->challenge_grade;
+            $item->rule = $gm->rule_grade;
+            $item->control = $gm->control_grade;
+            $item->scenario = $st->scenario_grade;
+            $item->characterBuilding = $st->character_building_grade;
+            $item->plot = $st->plot_grade;
+            $item->graphic = $av->graphic_grade;
+            $item->audio = $av->audio_grade;
+            $item->gameTitle = $evaluation->game->title;
+            $item->userId = $evaluation->user->id;
+
+            $response->push($item);
         }
 
-        $allEvaluations = $evaluations->chunk(5);
-
-        return view('evaluations.list', compact('allEvaluations'));
+        return $response;
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create($gameId)
+    public function addNewEvaluation(Request $request)
     {
-        return view('evaluations.create', compact('gameId'));
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(EvaluationValidation $request)
-    {
-        $total = $request->objective + $request->challenge + $request->rule
-        + $request->control + $request->scenario + $request->characterBuilding
-        + $request->plot + $request->graphic + $request->audio;
+        $total = $request['objective'] + $request['challenge'] + $request['rule']
+            + $request['control'] + $request['scenario'] + $request['characterBuilding']
+            + $request['plot'] + $request['graphic'] + $request['audio'];
 
         $grade = $total / 9;
 
         $evaluation = Evaluation::create([
             'user_id' => Auth::id(),
-            'game_id' => $request->gameId,
-            'title' => $request->title,
-            'description' => $request->description,
-            'grade' => $grade
+            'game_id' => $request['gameId'],
+            'title' => $request['title'],
+            'description' => $request['description'],
+            'grade' => round($grade)
         ]);
 
         GameMechanic::create([
             'evaluation_id' => $evaluation->id,
-            'objective_grade' => $request->objective,
-            'challenge_grade' => $request->challenge,
-            'rule_grade' => $request->rule,
-            'control_grade' => $request->control,
+            'objective_grade' => $request['objective'],
+            'challenge_grade' => $request['challenge'],
+            'rule_grade' => $request['rule'],
+            'control_grade' => $request['control'],
         ]);
 
         Story::create([
             'evaluation_id' => $evaluation->id,
-            'scenario_grade' => $request->scenario,
-            'character_building_grade' => $request->characterBuilding,
-            'plot_grade' => $request->plot,
+            'scenario_grade' => $request['scenario'],
+            'character_building_grade' => $request['characterBuilding'],
+            'plot_grade' => $request['plot'],
         ]);
 
         AudioVisual::create([
             'evaluation_id' => $evaluation->id,
-            'graphic_grade' => $request->graphic,
-            'audio_grade' => $request->audio,
+            'graphic_grade' => $request['graphic'],
+            'audio_grade' => $request['audio'],
         ]);
 
-        return redirect(route('evaluations.show',$evaluation->id));
+        $game = Game::find($request['gameId']);
+        $gameEvaluations = $game->evaluations;
+        $gameGrade = 0;
+        foreach ($gameEvaluations as $gameEvaluation) {
+            $gameGrade += $gameEvaluation->grade;
+        }
+        $gameGrade = $gameGrade / $gameEvaluations->count();
+        $game->update([
+            'grade' => $gameGrade
+        ]);
+
+        return 'evaluated';
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Evaluation  $evaluation
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Evaluation $evaluation)
+    public function editEvaluation(Request $request)
     {
-        return view('evaluations.show', compact('evaluation'));
+        try {
+            $total = $request['objective'] + $request['challenge'] + $request['rule']
+                + $request['control'] + $request['scenario'] + $request['characterBuilding']
+                + $request['plot'] + $request['graphic'] + $request['audio'];
+
+            $grade = $total / 9;
+
+            $evaluation = Evaluation::find($request['evaluationId']);
+
+            $evaluation->update([
+                'title' => $request['title'],
+                'description' => $request['description'],
+                'grade' => round($grade)
+            ]);
+
+            $evaluation->gameMechanic->update([
+                'objective_grade' => $request['objective'],
+                'challenge_grade' => $request['challenge'],
+                'rule_grade' => $request['rule'],
+                'control_grade' => $request['control'],
+            ]);
+
+            $evaluation->story->update([
+                'scenario_grade' => $request['scenario'],
+                'character_building_grade' => $request['characterBuilding'],
+                'plot_grade' => $request['plot'],
+            ]);
+
+            $evaluation->audioVisual->update([
+                'graphic_grade' => $request['graphic'],
+                'audio_grade' => $request['audio'],
+            ]);
+
+            $game = $evaluation->game;
+            $gameEvaluations = $game->evaluations;
+            $gameGrade = 0;
+            foreach ($gameEvaluations as $gameEvaluation) {
+                $gameGrade += $gameEvaluation->grade;
+            }
+            $gameGrade = $gameGrade / $gameEvaluations->count();
+            $game->update([
+                'grade' => $gameGrade
+            ]);
+
+            $gm = $evaluation->gameMechanic;
+            $st = $evaluation->story;
+            $av = $evaluation->audioVisual;
+
+            $item = new Collection();
+            $item->put('id', $evaluation->id);
+            $item->put('title', $evaluation->title);
+            $item->put('grade', $evaluation->grade);
+            $item->put('description', $evaluation->description);
+            $item->put('objective', $gm->objective_grade);
+            $item->put('challenge', $gm->challenge_grade);
+            $item->put('rule', $gm->rule_grade);
+            $item->put('control', $gm->control_grade);
+            $item->put('scenario', $st->scenario_grade);
+            $item->put('characterBuilding', $st->character_building_grade);
+            $item->put('plot', $st->plot_grade);
+            $item->put('graphic', $av->graphic_grade);
+            $item->put('audio', $av->audio_grade);
+            $item->put('gameTitle', $evaluation->game->title);
+            $item->put('userId', $evaluation->user->id);
+
+            return $item;
+        } catch (\Exception $exception) {
+            return 'failed';
+        }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Evaluation  $evaluation
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Evaluation $evaluation, $gameId)
-    {
-        return view('evaluations.edit', compact('evaluation', 'gameId'));
-    }
+    public function deleteEvaluation(Request $request) {
+        $evaluation = Evaluation::find($request['evaluation']);
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Evaluation  $evaluation
-     * @return \Illuminate\Http\Response
-     */
-    public function update(EvaluationValidation $request, Evaluation $evaluation)
-    {
-        $total = $request->objective + $request->challenge + $request->rule
-        + $request->control + $request->scenario + $request->characterBuilding
-        + $request->plot + $request->graphic + $request->audio;
+        $game = $evaluation->game;
 
-        $grade = $total / 9;
-
-        $evaluation->update([
-            'user_id' => Auth::id(),
-            'game_id' => $request->gameId,
-            'title' => $request->title,
-            'description' => $request->description,
-            'grade' => $grade
-        ]);
-
-        $evaluation->gameMechanic->update([
-            'evaluation_id' => $evaluation->id,
-            'objective_grade' => $request->objective,
-            'challenge_grade' => $request->challenge,
-            'rule_grade' => $request->rule,
-            'control_grade' => $request->control,
-        ]);
-
-        $evaluation->story->update([
-            'evaluation_id' => $evaluation->id,
-            'scenario_grade' => $request->scenario,
-            'character_building_grade' => $request->characterBuilding,
-            'plot_grade' => $request->plot,
-        ]);
-
-        $evaluation->audioVisual->update([
-            'evaluation_id' => $evaluation->id,
-            'graphic_grade' => $request->graphic,
-            'audio_grade' => $request->audio,
-        ]);
-
-        return redirect(route('evaluations.show', $evaluation->id));
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Evaluation  $evaluation
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Evaluation $evaluation)
-    {
         $evaluation->delete();
 
-        return redirect(route('games.show', $evaluation->game->id));
+        $gameEvaluations = $game->evaluations;
+        $gameGrade = 0;
+        foreach ($gameEvaluations as $gameEvaluation) {
+            $gameGrade += $gameEvaluation->grade;
+        }
+        if ($gameEvaluations->count())
+            $gameGrade = $gameGrade / $gameEvaluations->count();
+        $game->update([
+            'grade' => $gameGrade
+        ]);
+
+        return 'deleted';
     }
 }

@@ -21957,12 +21957,573 @@ module.exports = Component.exports
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_loading_overlay__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_loading_overlay___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue_loading_overlay__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_loading_overlay_dist_vue_loading_css__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_loading_overlay_dist_vue_loading_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_vue_loading_overlay_dist_vue_loading_css__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_axios__ = __webpack_require__(57);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_axios__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
 //
 
-/* harmony default export */ __webpack_exports__["default"] = ({});
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    data: function data() {
+        return {
+            isLoading: false,
+            fullPage: true,
+            isAdmin: false,
+
+            showDeleteModal: false,
+            showEditModal: false,
+            showViewModal: false,
+
+            deletingEvaluationId: 0,
+
+            editingEvaluationId: 0,
+
+            newEvaluationTitle: '',
+            newEvaluationDescription: '',
+            newEvaluationGameTitle: '',
+            newEvaluationGrade: 0,
+            newEvaluationLikes: 0,
+
+            newEvaluationGMObjective: 50,
+            newEvaluationGMChallenge: 50,
+            newEvaluationGMRule: 50,
+            newEvaluationGMControl: 50,
+
+            newEvaluationSTScenario: 50,
+            newEvaluationSTCharacterBuilding: 50,
+            newEvaluationSTPlot: 50,
+
+            newEvaluationAVGraphic: 50,
+            newEvaluationAVAudio: 50,
+
+            searchingEvaluationTitle: '',
+
+            evaluations: []
+        };
+    },
+
+    components: {
+        Loading: __WEBPACK_IMPORTED_MODULE_0_vue_loading_overlay___default.a
+    },
+    created: function created() {
+        var _this = this;
+
+        this.isLoading = true;
+
+        this.$https.post('/current-user').then(function (response) {
+            if (response.data) {
+                if (response.data.is_admin) {
+                    _this.isAdmin = true;
+                } else {
+                    _this.isAdmin = false;
+                }
+            }
+        });
+
+        this.$https.post('/all-evaluations').then(function (response) {
+            console.log(response.data);
+            if (response.data) {
+                _this.evaluations = response.data;
+
+                _this.isLoading = false;
+            } else {
+                _this.isLoading = false;
+            }
+        });
+    },
+    methods: {
+        toggleDeleteModal: function toggleDeleteModal() {
+            this.showDeleteModal = !this.showDeleteModal;
+        },
+        toggleEditModal: function toggleEditModal() {
+            this.showEditModal = !this.showEditModal;
+        },
+        toggleViewModal: function toggleViewModal() {
+            this.showViewModal = !this.showViewModal;
+        },
+        prepareEvaluationEdit: function prepareEvaluationEdit(evaluation) {
+            this.editingEvaluationId = evaluation.id;
+            this.newEvaluationTitle = evaluation.title;
+            this.newEvaluationDescription = evaluation.description;
+            this.newEvaluationGMObjective = evaluation.objective;
+            this.newEvaluationGMChallenge = evaluation.challenge;
+            this.newEvaluationGMRule = evaluation.rule;
+            this.newEvaluationGMControl = evaluation.control;
+            this.newEvaluationSTScenario = evaluation.scenario;
+            this.newEvaluationSTCharacterBuilding = evaluation.characterBuilding;
+            this.newEvaluationSTPlot = evaluation.plot;
+            this.newEvaluationAVGraphic = evaluation.graphic;
+            this.newEvaluationAVAudio = evaluation.audio;
+            this.newEvaluationGameTitle = evaluation.gameTitle;
+
+            this.toggleEditModal();
+        },
+        prepareEvaluationView: function prepareEvaluationView(evaluation) {
+            this.newEvaluationTitle = evaluation.title;
+            this.newEvaluationDescription = evaluation.description;
+            this.newEvaluationGMObjective = evaluation.objective;
+            this.newEvaluationGMChallenge = evaluation.challenge;
+            this.newEvaluationGMRule = evaluation.rule;
+            this.newEvaluationGMControl = evaluation.control;
+            this.newEvaluationSTScenario = evaluation.scenario;
+            this.newEvaluationSTCharacterBuilding = evaluation.characterBuilding;
+            this.newEvaluationSTPlot = evaluation.plot;
+            this.newEvaluationAVGraphic = evaluation.graphic;
+            this.newEvaluationAVAudio = evaluation.audio;
+            this.newEvaluationGameTitle = evaluation.gameTitle;
+            this.newEvaluationGrade = evaluation.grade;
+
+            this.toggleViewModal();
+        },
+        prepareEvaluationDelete: function prepareEvaluationDelete(evaluation) {
+            this.deletingEvaluationId = evaluation.id;
+            this.toggleDeleteModal();
+        },
+        cancelEvaluationEdit: function cancelEvaluationEdit() {
+            this.editingEvaluationId = 0;
+            this.newEvaluationTitle = '';
+            this.newEvaluationDescription = '';
+            this.newEvaluationGMObjective = 0;
+            this.newEvaluationGMChallenge = 0;
+            this.newEvaluationGMRule = 0;
+            this.newEvaluationGMControl = 0;
+            this.newEvaluationSTScenario = 0;
+            this.newEvaluationSTCharacterBuilding = 0;
+            this.newEvaluationSTPlot = 0;
+            this.newEvaluationAVGraphic = 0;
+            this.newEvaluationAVAudio = 0;
+            this.newEvaluationGameTitle = '';
+        },
+        editEvaluation: function editEvaluation() {
+            var _this2 = this;
+
+            this.isLoading = true;
+
+            var payload = {
+                evaluationId: this.editingEvaluationId,
+                title: this.newEvaluationTitle,
+                description: this.newEvaluationDescription,
+                objective: this.newEvaluationGMObjective,
+                challenge: this.newEvaluationGMChallenge,
+                rule: this.newEvaluationGMRule,
+                control: this.newEvaluationGMControl,
+                scenario: this.newEvaluationSTScenario,
+                characterBuilding: this.newEvaluationSTCharacterBuilding,
+                plot: this.newEvaluationSTPlot,
+                graphic: this.newEvaluationAVGraphic,
+                audio: this.newEvaluationAVAudio
+            };
+
+            __WEBPACK_IMPORTED_MODULE_2_axios___default.a.post('/edit-evaluation', payload).then(function (response) {
+                if (response.data === 'failed') {
+                    _this2.isLoading = false;
+                    return;
+                }
+
+                var evaluationId = _this2.editingEvaluationId;
+
+                _this2.evaluations.forEach(function (currentEvaluation, index, evaluations) {
+                    if (currentEvaluation.id === evaluationId) {
+                        evaluations[index] = response.data;
+                    }
+                });
+
+                _this2.toggleEditModal();
+                _this2.cancelEvaluationEdit();
+
+                _this2.isLoading = false;
+            });
+        },
+        deleteEvaluation: function deleteEvaluation(evaluationId) {
+            var _this3 = this;
+
+            this.isLoading = true;
+
+            var payload = {
+                evaluation: evaluationId
+            };
+
+            __WEBPACK_IMPORTED_MODULE_2_axios___default.a.post('/delete-evaluation', payload).then(function (response) {
+                if (response.data !== 'deleted') {
+                    _this3.isLoading = false;
+                    return;
+                }
+
+                _this3.evaluations.forEach(function (currentEvaluation, index, evaluations) {
+                    if (currentEvaluation.id === evaluationId) {
+                        evaluations.splice(index, 1);
+                    }
+                });
+
+                _this3.toggleDeleteModal();
+                _this3.isLoading = false;
+            });
+        }
+    }
+});
 
 /***/ }),
 /* 52 */
@@ -21972,9 +22533,1534 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("p", [_vm._v("Avaliações")])
+  return _c(
+    "div",
+    { staticClass: "float-left w-full" },
+    [
+      _c("loading", {
+        attrs: {
+          active: _vm.isLoading,
+          "can-cancel": false,
+          "is-full-page": _vm.fullPage
+        },
+        on: {
+          "update:active": function($event) {
+            _vm.isLoading = $event
+          }
+        }
+      }),
+      _vm._v(" "),
+      _vm.showDeleteModal
+        ? _c(
+            "div",
+            {
+              staticClass:
+                "w-full grid justify-items-center text-white overflow-x-hidden overflow-y-auto over fixed inset-0 z-50 outline-none focus:outline-none justify-center items-center flex-none full-screen"
+            },
+            [
+              _c(
+                "div",
+                { staticClass: "relative w-auto my-6 mx-auto max-w-6xl flex" },
+                [
+                  _c("div", { staticClass: "w-1/5" }),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      staticClass:
+                        "border-0 rounded-lg shadow-lg relative flex-none flex-col w-3/5 full-screen bg-purple outline-none focus:outline-none"
+                    },
+                    [
+                      _c(
+                        "div",
+                        {
+                          staticClass:
+                            "flex items-start justify-between p-5 border-b border-solid border-purple-darker rounded-t"
+                        },
+                        [
+                          _c("h3", { staticClass: "text-3xl font-semibold" }, [
+                            _vm._v(
+                              "\n                        Excluir Categoria\n                    "
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c(
+                            "button",
+                            {
+                              staticClass:
+                                "p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none",
+                              on: {
+                                click: function($event) {
+                                  return _vm.toggleDeleteModal()
+                                }
+                              }
+                            },
+                            [
+                              _c(
+                                "span",
+                                {
+                                  staticClass:
+                                    "bg-transparent text-white opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none"
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                        ×\n                      "
+                                  )
+                                ]
+                              )
+                            ]
+                          )
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _vm._m(0),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        {
+                          staticClass:
+                            "flex items-center justify-end p-6 border-t border-solid border-purple-darker rounded-b"
+                        },
+                        [
+                          _c(
+                            "button",
+                            {
+                              staticClass:
+                                "text-white bg-transparent border border-solid border-red-500 hover:bg-red-500 hover:text-white active:bg-red-600 font-bold uppercase text-sm px-6 py-3 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150",
+                              attrs: { type: "button" },
+                              on: {
+                                click: function($event) {
+                                  return _vm.toggleDeleteModal()
+                                }
+                              }
+                            },
+                            [
+                              _vm._v(
+                                "\n                        Cancelar\n                    "
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "button",
+                            {
+                              staticClass:
+                                "text-white background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150",
+                              attrs: { type: "button" },
+                              on: {
+                                click: function($event) {
+                                  return _vm.deleteEvaluation(
+                                    _vm.deletingEvaluationId
+                                  )
+                                }
+                              }
+                            },
+                            [
+                              _vm._v(
+                                "\n                        Excluir\n                    "
+                              )
+                            ]
+                          )
+                        ]
+                      )
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "w-1/5" })
+                ]
+              )
+            ]
+          )
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.showDeleteModal
+        ? _c("div", {
+            staticClass: "opacity-25 fixed inset-0 z-40 bg-black full-screen"
+          })
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.showEditModal
+        ? _c(
+            "div",
+            {
+              staticClass:
+                "w-full grid justify-items-center text-white overflow-x-hidden overflow-y-auto over fixed inset-0 z-50 outline-none focus:outline-none justify-center items-center flex-none full-screen"
+            },
+            [
+              _c(
+                "div",
+                { staticClass: "relative w-auto my-6 mx-auto max-w-6xl flex" },
+                [
+                  _c("div", { staticClass: "w-1/5" }),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      staticClass:
+                        "border-0 rounded-lg shadow-lg relative flex-none flex-col w-3/5 full-screen bg-purple outline-none focus:outline-none"
+                    },
+                    [
+                      _c(
+                        "div",
+                        {
+                          staticClass:
+                            "flex items-start justify-between p-5 border-b border-solid border-purple-darker rounded-t"
+                        },
+                        [
+                          _c("h3", { staticClass: "text-3xl font-semibold" }, [
+                            _vm._v(
+                              "\n                        Editar Avaliação\n                    "
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c(
+                            "button",
+                            {
+                              staticClass:
+                                "p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none",
+                              on: {
+                                click: function($event) {
+                                  return _vm.toggleEditModal()
+                                }
+                              }
+                            },
+                            [
+                              _c(
+                                "span",
+                                {
+                                  staticClass:
+                                    "bg-transparent text-white opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none"
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                        ×\n                      "
+                                  )
+                                ]
+                              )
+                            ]
+                          )
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        { staticClass: "w-full relative p-6 flex-none" },
+                        [
+                          _c("div", { staticClass: "width-high flex-auto" }, [
+                            _c(
+                              "div",
+                              {
+                                staticClass:
+                                  "w-full justify-center flex mt-10 mb-6"
+                              },
+                              [
+                                _c("input", {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: _vm.newEvaluationTitle,
+                                      expression: "newEvaluationTitle"
+                                    }
+                                  ],
+                                  staticClass: "h-10",
+                                  attrs: {
+                                    type: "text",
+                                    placeholder: "Título do Jogo"
+                                  },
+                                  domProps: { value: _vm.newEvaluationTitle },
+                                  on: {
+                                    input: function($event) {
+                                      if ($event.target.composing) {
+                                        return
+                                      }
+                                      _vm.newEvaluationTitle =
+                                        $event.target.value
+                                    }
+                                  }
+                                })
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "div",
+                              {
+                                staticClass:
+                                  "w-full justify-center flex mt-10 mb-6"
+                              },
+                              [
+                                _c("textarea", {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: _vm.newEvaluationDescription,
+                                      expression: "newEvaluationDescription"
+                                    }
+                                  ],
+                                  attrs: {
+                                    cols: "30",
+                                    rows: "10",
+                                    required: "",
+                                    autofocus: "",
+                                    placeholder: "Descrição da Avaliação"
+                                  },
+                                  domProps: {
+                                    value: _vm.newEvaluationDescription
+                                  },
+                                  on: {
+                                    input: function($event) {
+                                      if ($event.target.composing) {
+                                        return
+                                      }
+                                      _vm.newEvaluationDescription =
+                                        $event.target.value
+                                    }
+                                  }
+                                })
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _vm._m(1),
+                            _vm._v(" "),
+                            _c(
+                              "div",
+                              {
+                                staticClass: "w-full justify-center flex mb-6"
+                              },
+                              [
+                                _c("div", { staticClass: "w-1/3" }, [
+                                  _vm._m(2),
+                                  _vm._v(" "),
+                                  _c(
+                                    "div",
+                                    {
+                                      staticClass:
+                                        "w-full justify-center flex mb-6"
+                                    },
+                                    [
+                                      _c("p", [_vm._v("0")]),
+                                      _vm._v(" "),
+                                      _c("input", {
+                                        directives: [
+                                          {
+                                            name: "model",
+                                            rawName: "v-model",
+                                            value: _vm.newEvaluationGMChallenge,
+                                            expression:
+                                              "newEvaluationGMChallenge"
+                                          }
+                                        ],
+                                        attrs: { type: "range" },
+                                        domProps: {
+                                          value: _vm.newEvaluationGMChallenge
+                                        },
+                                        on: {
+                                          __r: function($event) {
+                                            _vm.newEvaluationGMChallenge =
+                                              $event.target.value
+                                          }
+                                        }
+                                      }),
+                                      _vm._v(" "),
+                                      _c("p", [_vm._v("100")])
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _vm._m(3),
+                                  _vm._v(" "),
+                                  _c(
+                                    "div",
+                                    {
+                                      staticClass:
+                                        "w-full justify-center flex mb-6"
+                                    },
+                                    [
+                                      _c("p", [_vm._v("0")]),
+                                      _vm._v(" "),
+                                      _c("input", {
+                                        directives: [
+                                          {
+                                            name: "model",
+                                            rawName: "v-model",
+                                            value: _vm.newEvaluationGMControl,
+                                            expression: "newEvaluationGMControl"
+                                          }
+                                        ],
+                                        attrs: { type: "range" },
+                                        domProps: {
+                                          value: _vm.newEvaluationGMControl
+                                        },
+                                        on: {
+                                          __r: function($event) {
+                                            _vm.newEvaluationGMControl =
+                                              $event.target.value
+                                          }
+                                        }
+                                      }),
+                                      _vm._v(" "),
+                                      _c("p", [_vm._v("100")])
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _vm._m(4),
+                                  _vm._v(" "),
+                                  _c(
+                                    "div",
+                                    {
+                                      staticClass:
+                                        "w-full justify-center flex mb-6"
+                                    },
+                                    [
+                                      _c("p", [_vm._v("0")]),
+                                      _vm._v(" "),
+                                      _c("input", {
+                                        directives: [
+                                          {
+                                            name: "model",
+                                            rawName: "v-model",
+                                            value: _vm.newEvaluationGMObjective,
+                                            expression:
+                                              "newEvaluationGMObjective"
+                                          }
+                                        ],
+                                        attrs: { type: "range" },
+                                        domProps: {
+                                          value: _vm.newEvaluationGMObjective
+                                        },
+                                        on: {
+                                          __r: function($event) {
+                                            _vm.newEvaluationGMObjective =
+                                              $event.target.value
+                                          }
+                                        }
+                                      }),
+                                      _vm._v(" "),
+                                      _c("p", [_vm._v("100")])
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _vm._m(5),
+                                  _vm._v(" "),
+                                  _c(
+                                    "div",
+                                    {
+                                      staticClass:
+                                        "w-full justify-center flex mb-6"
+                                    },
+                                    [
+                                      _c("p", [_vm._v("0")]),
+                                      _vm._v(" "),
+                                      _c("input", {
+                                        directives: [
+                                          {
+                                            name: "model",
+                                            rawName: "v-model",
+                                            value: _vm.newEvaluationGMRule,
+                                            expression: "newEvaluationGMRule"
+                                          }
+                                        ],
+                                        attrs: { type: "range" },
+                                        domProps: {
+                                          value: _vm.newEvaluationGMRule
+                                        },
+                                        on: {
+                                          __r: function($event) {
+                                            _vm.newEvaluationGMRule =
+                                              $event.target.value
+                                          }
+                                        }
+                                      }),
+                                      _vm._v(" "),
+                                      _c("p", [_vm._v("100")])
+                                    ]
+                                  )
+                                ]),
+                                _vm._v(" "),
+                                _c("div", { staticClass: "w-1/3" }, [
+                                  _vm._m(6),
+                                  _vm._v(" "),
+                                  _c(
+                                    "div",
+                                    {
+                                      staticClass:
+                                        "w-full justify-center flex mb-6"
+                                    },
+                                    [
+                                      _c("p", [_vm._v("0")]),
+                                      _vm._v(" "),
+                                      _c("input", {
+                                        directives: [
+                                          {
+                                            name: "model",
+                                            rawName: "v-model",
+                                            value: _vm.newEvaluationSTScenario,
+                                            expression:
+                                              "newEvaluationSTScenario"
+                                          }
+                                        ],
+                                        attrs: { type: "range" },
+                                        domProps: {
+                                          value: _vm.newEvaluationSTScenario
+                                        },
+                                        on: {
+                                          __r: function($event) {
+                                            _vm.newEvaluationSTScenario =
+                                              $event.target.value
+                                          }
+                                        }
+                                      }),
+                                      _vm._v(" "),
+                                      _c("p", [_vm._v("100")])
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _vm._m(7),
+                                  _vm._v(" "),
+                                  _c(
+                                    "div",
+                                    {
+                                      staticClass:
+                                        "w-full justify-center flex mb-6"
+                                    },
+                                    [
+                                      _c("p", [_vm._v("0")]),
+                                      _vm._v(" "),
+                                      _c("input", {
+                                        directives: [
+                                          {
+                                            name: "model",
+                                            rawName: "v-model",
+                                            value:
+                                              _vm.newEvaluationSTCharacterBuilding,
+                                            expression:
+                                              "newEvaluationSTCharacterBuilding"
+                                          }
+                                        ],
+                                        attrs: { type: "range" },
+                                        domProps: {
+                                          value:
+                                            _vm.newEvaluationSTCharacterBuilding
+                                        },
+                                        on: {
+                                          __r: function($event) {
+                                            _vm.newEvaluationSTCharacterBuilding =
+                                              $event.target.value
+                                          }
+                                        }
+                                      }),
+                                      _vm._v(" "),
+                                      _c("p", [_vm._v("100")])
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _vm._m(8),
+                                  _vm._v(" "),
+                                  _c(
+                                    "div",
+                                    {
+                                      staticClass:
+                                        "w-full justify-center flex mb-6"
+                                    },
+                                    [
+                                      _c("p", [_vm._v("0")]),
+                                      _vm._v(" "),
+                                      _c("input", {
+                                        directives: [
+                                          {
+                                            name: "model",
+                                            rawName: "v-model",
+                                            value: _vm.newEvaluationSTPlot,
+                                            expression: "newEvaluationSTPlot"
+                                          }
+                                        ],
+                                        attrs: { type: "range" },
+                                        domProps: {
+                                          value: _vm.newEvaluationSTPlot
+                                        },
+                                        on: {
+                                          __r: function($event) {
+                                            _vm.newEvaluationSTPlot =
+                                              $event.target.value
+                                          }
+                                        }
+                                      }),
+                                      _vm._v(" "),
+                                      _c("p", [_vm._v("100")])
+                                    ]
+                                  )
+                                ]),
+                                _vm._v(" "),
+                                _c("div", { staticClass: "w-1/3" }, [
+                                  _vm._m(9),
+                                  _vm._v(" "),
+                                  _c(
+                                    "div",
+                                    {
+                                      staticClass:
+                                        "w-full justify-center flex mb-6"
+                                    },
+                                    [
+                                      _c("p", [_vm._v("0")]),
+                                      _vm._v(" "),
+                                      _c("input", {
+                                        directives: [
+                                          {
+                                            name: "model",
+                                            rawName: "v-model",
+                                            value: _vm.newEvaluationAVGraphic,
+                                            expression: "newEvaluationAVGraphic"
+                                          }
+                                        ],
+                                        attrs: { type: "range" },
+                                        domProps: {
+                                          value: _vm.newEvaluationAVGraphic
+                                        },
+                                        on: {
+                                          __r: function($event) {
+                                            _vm.newEvaluationAVGraphic =
+                                              $event.target.value
+                                          }
+                                        }
+                                      }),
+                                      _vm._v(" "),
+                                      _c("p", [_vm._v("100")])
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _vm._m(10),
+                                  _vm._v(" "),
+                                  _c(
+                                    "div",
+                                    {
+                                      staticClass:
+                                        "w-full justify-center flex mb-6"
+                                    },
+                                    [
+                                      _c("p", [_vm._v("0")]),
+                                      _vm._v(" "),
+                                      _c("input", {
+                                        directives: [
+                                          {
+                                            name: "model",
+                                            rawName: "v-model",
+                                            value: _vm.newEvaluationAVAudio,
+                                            expression: "newEvaluationAVAudio"
+                                          }
+                                        ],
+                                        attrs: { type: "range" },
+                                        domProps: {
+                                          value: _vm.newEvaluationAVAudio
+                                        },
+                                        on: {
+                                          __r: function($event) {
+                                            _vm.newEvaluationAVAudio =
+                                              $event.target.value
+                                          }
+                                        }
+                                      }),
+                                      _vm._v(" "),
+                                      _c("p", [_vm._v("100")])
+                                    ]
+                                  )
+                                ])
+                              ]
+                            )
+                          ])
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        {
+                          staticClass:
+                            "flex items-center justify-end p-6 border-t border-solid border-purple-darker rounded-b"
+                        },
+                        [
+                          _c(
+                            "button",
+                            {
+                              staticClass:
+                                "text-white bg-transparent border border-solid border-red-500 hover:bg-red-500 hover:text-white active:bg-red-600 font-bold uppercase text-sm px-6 py-3 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150",
+                              attrs: { type: "button" },
+                              on: {
+                                click: function($event) {
+                                  return _vm.toggleEditModal()
+                                }
+                              }
+                            },
+                            [
+                              _vm._v(
+                                "\n                        Fechar\n                    "
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "button",
+                            {
+                              staticClass:
+                                "text-white background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150",
+                              attrs: { type: "button" },
+                              on: {
+                                click: function($event) {
+                                  return _vm.editEvaluation()
+                                }
+                              }
+                            },
+                            [
+                              _vm._v(
+                                "\n                        Editar Avaliação\n                    "
+                              )
+                            ]
+                          )
+                        ]
+                      )
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "w-1/5" })
+                ]
+              )
+            ]
+          )
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.showEditModal
+        ? _c("div", {
+            staticClass: "opacity-25 fixed inset-0 z-40 bg-black full-screen"
+          })
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.showViewModal
+        ? _c(
+            "div",
+            {
+              staticClass:
+                "w-full grid justify-items-center text-white overflow-x-hidden overflow-y-auto over fixed inset-0 z-50 outline-none focus:outline-none justify-center items-center flex-none full-screen"
+            },
+            [
+              _c(
+                "div",
+                { staticClass: "relative w-auto my-6 mx-auto max-w-6xl flex" },
+                [
+                  _c("div", { staticClass: "w-1/5" }),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      staticClass:
+                        "border-0 rounded-lg shadow-lg relative flex-none flex-col w-3/5 full-screen bg-purple outline-none focus:outline-none"
+                    },
+                    [
+                      _c(
+                        "div",
+                        {
+                          staticClass:
+                            "flex items-start justify-between p-5 border-b border-solid border-purple-darker rounded-t"
+                        },
+                        [
+                          _c("h3", { staticClass: "text-3xl font-semibold" }, [
+                            _vm._v(
+                              "\n                        " +
+                                _vm._s(_vm.newEvaluationTitle) +
+                                "\n                    "
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c(
+                            "button",
+                            {
+                              staticClass:
+                                "p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none",
+                              on: {
+                                click: function($event) {
+                                  return _vm.toggleViewModal()
+                                }
+                              }
+                            },
+                            [
+                              _c(
+                                "span",
+                                {
+                                  staticClass:
+                                    "bg-transparent text-white opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none"
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                        ×\n                      "
+                                  )
+                                ]
+                              )
+                            ]
+                          )
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        { staticClass: "w-full relative p-6 flex-none" },
+                        [
+                          _c("div", { staticClass: "width-high flex-auto" }, [
+                            _c(
+                              "div",
+                              {
+                                staticClass:
+                                  "w-full justify-center flex mt-10 mb-6"
+                              },
+                              [
+                                _c("p", [
+                                  _vm._v(
+                                    "Jogo: " +
+                                      _vm._s(_vm.newEvaluationGameTitle)
+                                  )
+                                ])
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "div",
+                              {
+                                staticClass:
+                                  "w-full justify-center flex mt-10 mb-6"
+                              },
+                              [
+                                _c("p", [
+                                  _vm._v(
+                                    "Nota Geral: " +
+                                      _vm._s(_vm.newEvaluationGrade)
+                                  )
+                                ])
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "div",
+                              {
+                                staticClass:
+                                  "w-full justify-center flex mt-10 mb-6"
+                              },
+                              [
+                                _c("p", [
+                                  _vm._v(
+                                    "Curtidas: " +
+                                      _vm._s(_vm.newEvaluationLikes)
+                                  )
+                                ])
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "div",
+                              {
+                                staticClass:
+                                  "w-full justify-center flex mt-10 mb-6"
+                              },
+                              [
+                                _c("p", [
+                                  _vm._v(
+                                    "Descrição: " +
+                                      _vm._s(_vm.newEvaluationDescription)
+                                  )
+                                ])
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _vm._m(11),
+                            _vm._v(" "),
+                            _c(
+                              "div",
+                              {
+                                staticClass: "w-full justify-center flex mb-6"
+                              },
+                              [
+                                _c("div", { staticClass: "w-1/3" }, [
+                                  _vm._m(12),
+                                  _vm._v(" "),
+                                  _c(
+                                    "div",
+                                    {
+                                      staticClass:
+                                        "w-full justify-center flex mb-6"
+                                    },
+                                    [
+                                      _c("p", [_vm._v("0")]),
+                                      _vm._v(" "),
+                                      _c("input", {
+                                        directives: [
+                                          {
+                                            name: "model",
+                                            rawName: "v-model",
+                                            value: _vm.newEvaluationGMChallenge,
+                                            expression:
+                                              "newEvaluationGMChallenge"
+                                          }
+                                        ],
+                                        attrs: { type: "range", disabled: "" },
+                                        domProps: {
+                                          value: _vm.newEvaluationGMChallenge
+                                        },
+                                        on: {
+                                          __r: function($event) {
+                                            _vm.newEvaluationGMChallenge =
+                                              $event.target.value
+                                          }
+                                        }
+                                      }),
+                                      _vm._v(" "),
+                                      _c("p", [_vm._v("100")])
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _vm._m(13),
+                                  _vm._v(" "),
+                                  _c(
+                                    "div",
+                                    {
+                                      staticClass:
+                                        "w-full justify-center flex mb-6"
+                                    },
+                                    [
+                                      _c("p", [_vm._v("0")]),
+                                      _vm._v(" "),
+                                      _c("input", {
+                                        directives: [
+                                          {
+                                            name: "model",
+                                            rawName: "v-model",
+                                            value: _vm.newEvaluationGMControl,
+                                            expression: "newEvaluationGMControl"
+                                          }
+                                        ],
+                                        attrs: { type: "range", disabled: "" },
+                                        domProps: {
+                                          value: _vm.newEvaluationGMControl
+                                        },
+                                        on: {
+                                          __r: function($event) {
+                                            _vm.newEvaluationGMControl =
+                                              $event.target.value
+                                          }
+                                        }
+                                      }),
+                                      _vm._v(" "),
+                                      _c("p", [_vm._v("100")])
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _vm._m(14),
+                                  _vm._v(" "),
+                                  _c(
+                                    "div",
+                                    {
+                                      staticClass:
+                                        "w-full justify-center flex mb-6"
+                                    },
+                                    [
+                                      _c("p", [_vm._v("0")]),
+                                      _vm._v(" "),
+                                      _c("input", {
+                                        directives: [
+                                          {
+                                            name: "model",
+                                            rawName: "v-model",
+                                            value: _vm.newEvaluationGMObjective,
+                                            expression:
+                                              "newEvaluationGMObjective"
+                                          }
+                                        ],
+                                        attrs: { type: "range", disabled: "" },
+                                        domProps: {
+                                          value: _vm.newEvaluationGMObjective
+                                        },
+                                        on: {
+                                          __r: function($event) {
+                                            _vm.newEvaluationGMObjective =
+                                              $event.target.value
+                                          }
+                                        }
+                                      }),
+                                      _vm._v(" "),
+                                      _c("p", [_vm._v("100")])
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _vm._m(15),
+                                  _vm._v(" "),
+                                  _c(
+                                    "div",
+                                    {
+                                      staticClass:
+                                        "w-full justify-center flex mb-6"
+                                    },
+                                    [
+                                      _c("p", [_vm._v("0")]),
+                                      _vm._v(" "),
+                                      _c("input", {
+                                        directives: [
+                                          {
+                                            name: "model",
+                                            rawName: "v-model",
+                                            value: _vm.newEvaluationGMRule,
+                                            expression: "newEvaluationGMRule"
+                                          }
+                                        ],
+                                        attrs: { type: "range", disabled: "" },
+                                        domProps: {
+                                          value: _vm.newEvaluationGMRule
+                                        },
+                                        on: {
+                                          __r: function($event) {
+                                            _vm.newEvaluationGMRule =
+                                              $event.target.value
+                                          }
+                                        }
+                                      }),
+                                      _vm._v(" "),
+                                      _c("p", [_vm._v("100")])
+                                    ]
+                                  )
+                                ]),
+                                _vm._v(" "),
+                                _c("div", { staticClass: "w-1/3" }, [
+                                  _vm._m(16),
+                                  _vm._v(" "),
+                                  _c(
+                                    "div",
+                                    {
+                                      staticClass:
+                                        "w-full justify-center flex mb-6"
+                                    },
+                                    [
+                                      _c("p", [_vm._v("0")]),
+                                      _vm._v(" "),
+                                      _c("input", {
+                                        directives: [
+                                          {
+                                            name: "model",
+                                            rawName: "v-model",
+                                            value: _vm.newEvaluationSTScenario,
+                                            expression:
+                                              "newEvaluationSTScenario"
+                                          }
+                                        ],
+                                        attrs: { type: "range", disabled: "" },
+                                        domProps: {
+                                          value: _vm.newEvaluationSTScenario
+                                        },
+                                        on: {
+                                          __r: function($event) {
+                                            _vm.newEvaluationSTScenario =
+                                              $event.target.value
+                                          }
+                                        }
+                                      }),
+                                      _vm._v(" "),
+                                      _c("p", [_vm._v("100")])
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _vm._m(17),
+                                  _vm._v(" "),
+                                  _c(
+                                    "div",
+                                    {
+                                      staticClass:
+                                        "w-full justify-center flex mb-6"
+                                    },
+                                    [
+                                      _c("p", [_vm._v("0")]),
+                                      _vm._v(" "),
+                                      _c("input", {
+                                        directives: [
+                                          {
+                                            name: "model",
+                                            rawName: "v-model",
+                                            value:
+                                              _vm.newEvaluationSTCharacterBuilding,
+                                            expression:
+                                              "newEvaluationSTCharacterBuilding"
+                                          }
+                                        ],
+                                        attrs: { type: "range", disabled: "" },
+                                        domProps: {
+                                          value:
+                                            _vm.newEvaluationSTCharacterBuilding
+                                        },
+                                        on: {
+                                          __r: function($event) {
+                                            _vm.newEvaluationSTCharacterBuilding =
+                                              $event.target.value
+                                          }
+                                        }
+                                      }),
+                                      _vm._v(" "),
+                                      _c("p", [_vm._v("100")])
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _vm._m(18),
+                                  _vm._v(" "),
+                                  _c(
+                                    "div",
+                                    {
+                                      staticClass:
+                                        "w-full justify-center flex mb-6"
+                                    },
+                                    [
+                                      _c("p", [_vm._v("0")]),
+                                      _vm._v(" "),
+                                      _c("input", {
+                                        directives: [
+                                          {
+                                            name: "model",
+                                            rawName: "v-model",
+                                            value: _vm.newEvaluationSTPlot,
+                                            expression: "newEvaluationSTPlot"
+                                          }
+                                        ],
+                                        attrs: { type: "range", disabled: "" },
+                                        domProps: {
+                                          value: _vm.newEvaluationSTPlot
+                                        },
+                                        on: {
+                                          __r: function($event) {
+                                            _vm.newEvaluationSTPlot =
+                                              $event.target.value
+                                          }
+                                        }
+                                      }),
+                                      _vm._v(" "),
+                                      _c("p", [_vm._v("100")])
+                                    ]
+                                  )
+                                ]),
+                                _vm._v(" "),
+                                _c("div", { staticClass: "w-1/3" }, [
+                                  _vm._m(19),
+                                  _vm._v(" "),
+                                  _c(
+                                    "div",
+                                    {
+                                      staticClass:
+                                        "w-full justify-center flex mb-6"
+                                    },
+                                    [
+                                      _c("p", [_vm._v("0")]),
+                                      _vm._v(" "),
+                                      _c("input", {
+                                        directives: [
+                                          {
+                                            name: "model",
+                                            rawName: "v-model",
+                                            value: _vm.newEvaluationAVGraphic,
+                                            expression: "newEvaluationAVGraphic"
+                                          }
+                                        ],
+                                        attrs: { type: "range", disabled: "" },
+                                        domProps: {
+                                          value: _vm.newEvaluationAVGraphic
+                                        },
+                                        on: {
+                                          __r: function($event) {
+                                            _vm.newEvaluationAVGraphic =
+                                              $event.target.value
+                                          }
+                                        }
+                                      }),
+                                      _vm._v(" "),
+                                      _c("p", [_vm._v("100")])
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _vm._m(20),
+                                  _vm._v(" "),
+                                  _c(
+                                    "div",
+                                    {
+                                      staticClass:
+                                        "w-full justify-center flex mb-6"
+                                    },
+                                    [
+                                      _c("p", [_vm._v("0")]),
+                                      _vm._v(" "),
+                                      _c("input", {
+                                        directives: [
+                                          {
+                                            name: "model",
+                                            rawName: "v-model",
+                                            value: _vm.newEvaluationAVAudio,
+                                            expression: "newEvaluationAVAudio"
+                                          }
+                                        ],
+                                        attrs: { type: "range", disabled: "" },
+                                        domProps: {
+                                          value: _vm.newEvaluationAVAudio
+                                        },
+                                        on: {
+                                          __r: function($event) {
+                                            _vm.newEvaluationAVAudio =
+                                              $event.target.value
+                                          }
+                                        }
+                                      }),
+                                      _vm._v(" "),
+                                      _c("p", [_vm._v("100")])
+                                    ]
+                                  )
+                                ])
+                              ]
+                            )
+                          ])
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        {
+                          staticClass:
+                            "flex items-center justify-end p-6 border-t border-solid border-purple-darker rounded-b"
+                        },
+                        [
+                          _c(
+                            "button",
+                            {
+                              staticClass:
+                                "text-white bg-transparent border border-solid border-red-500 hover:bg-red-500 hover:text-white active:bg-red-600 font-bold uppercase text-sm px-6 py-3 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150",
+                              attrs: { type: "button" },
+                              on: {
+                                click: function($event) {
+                                  return _vm.toggleViewModal()
+                                }
+                              }
+                            },
+                            [
+                              _vm._v(
+                                "\n                        Fechar\n                    "
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c("button", {
+                            staticClass:
+                              "text-white background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150",
+                            attrs: { type: "button" },
+                            on: { click: function($event) {} }
+                          })
+                        ]
+                      )
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "w-1/5" })
+                ]
+              )
+            ]
+          )
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.showViewModal
+        ? _c("div", {
+            staticClass: "opacity-25 fixed inset-0 z-40 bg-black full-screen"
+          })
+        : _vm._e(),
+      _vm._v(" "),
+      _vm._m(21),
+      _vm._v(" "),
+      _c("div", { staticClass: "w-full justify-center flex mt-10 mb-6" }, [
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.searchingEvaluationTitle,
+              expression: "searchingEvaluationTitle"
+            }
+          ],
+          staticClass: "h-10 w-2/5",
+          attrs: { type: "text", placeholder: "Título da Avaliação" },
+          domProps: { value: _vm.searchingEvaluationTitle },
+          on: {
+            input: function($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.searchingEvaluationTitle = $event.target.value
+            }
+          }
+        }),
+        _vm._v(" "),
+        _c(
+          "button",
+          {
+            staticClass: "bg-green w-1/5 h-10 text-white font-bold",
+            on: { click: function($event) {} }
+          },
+          [_vm._v("Pesquisar")]
+        )
+      ]),
+      _vm._v(" "),
+      _vm._l(_vm.evaluations, function(evaluation) {
+        return _c("div", { staticClass: "flex bg-green m-1 p-1 rounded-lg" }, [
+          _c("div", { staticClass: "w-3/5" }, [
+            _c("h2", [_vm._v(_vm._s(evaluation.title))]),
+            _vm._v(" "),
+            _c("p", [_vm._v("Jogo: " + _vm._s(evaluation.gameTitle))]),
+            _vm._v(" "),
+            _c("p", [_vm._v("Nota geral: " + _vm._s(evaluation.grade))]),
+            _vm._v(" "),
+            _c("p", [_vm._v("Curtidas: 0")]),
+            _vm._v(" "),
+            _c("p", [_vm._v("Descrição: " + _vm._s(evaluation.description))])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "w-2/5 flex-none" }, [
+            _c("div", { staticClass: "w-full mb-6" }, [
+              _vm.isAdmin || _vm.userId === evaluation.userId
+                ? _c(
+                    "button",
+                    {
+                      staticClass:
+                        "bg-purple w-2/5 text-white h-8 font-bold rounded-lg",
+                      on: {
+                        click: function($event) {
+                          return _vm.prepareEvaluationEdit(evaluation)
+                        }
+                      }
+                    },
+                    [_vm._v("Editar")]
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.isAdmin || _vm.userId === evaluation.userId
+                ? _c(
+                    "button",
+                    {
+                      staticClass:
+                        "bg-purple w-2/5 text-white h-8 font-bold rounded-lg",
+                      on: {
+                        click: function($event) {
+                          return _vm.prepareEvaluationDelete(evaluation)
+                        }
+                      }
+                    },
+                    [_vm._v("Excluir")]
+                  )
+                : _vm._e()
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "w-full" }, [
+              _c(
+                "button",
+                {
+                  staticClass:
+                    "bg-purple w-2/5 text-white h-8 font-bold rounded-lg",
+                  on: {
+                    click: function($event) {
+                      return _vm.prepareEvaluationView(evaluation)
+                    }
+                  }
+                },
+                [_vm._v("Ver Detalhes")]
+              ),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass:
+                    "bg-purple w-2/5 text-white h-8 font-bold rounded-lg",
+                  on: { click: function($event) {} }
+                },
+                [_vm._v("Curtir")]
+              )
+            ])
+          ])
+        ])
+      })
+    ],
+    2
+  )
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "w-full relative p-6 flex-none" }, [
+      _c("div", { staticClass: "flex-auto" }, [
+        _c("p", [_vm._v("Tem certeza que deseja exluir esta categoria?")])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "w-full justify-center flex mt-10" }, [
+      _c("h2", [_vm._v("Notas Técnicas")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "w-full justify-center flex mt-10" }, [
+      _c("label", [_vm._v("Desafio")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "w-full justify-center flex mt-10" }, [
+      _c("label", [_vm._v("Jogabilidade")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "w-full justify-center flex mt-10" }, [
+      _c("label", [_vm._v("Objetivo")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "w-full justify-center flex mt-10" }, [
+      _c("label", [_vm._v("Regras")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "w-full justify-center flex mt-10" }, [
+      _c("label", [_vm._v("Cenário")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "w-full justify-center flex mt-10" }, [
+      _c("label", [_vm._v("Construção de Personagem")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "w-full justify-center flex mt-10" }, [
+      _c("label", [_vm._v("Enredo")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "w-full justify-center flex mt-10" }, [
+      _c("label", [_vm._v("Gráfico")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "w-full justify-center flex mt-10" }, [
+      _c("label", [_vm._v("Áudio")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "w-full justify-center flex mt-10" }, [
+      _c("h2", [_vm._v("Notas Técnicas")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "w-full justify-center flex mt-10" }, [
+      _c("label", [_vm._v("Desafio")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "w-full justify-center flex mt-10" }, [
+      _c("label", [_vm._v("Jogabilidade")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "w-full justify-center flex mt-10" }, [
+      _c("label", [_vm._v("Objetivo")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "w-full justify-center flex mt-10" }, [
+      _c("label", [_vm._v("Regras")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "w-full justify-center flex mt-10" }, [
+      _c("label", [_vm._v("Cenário")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "w-full justify-center flex mt-10" }, [
+      _c("label", [_vm._v("Construção de Personagem")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "w-full justify-center flex mt-10" }, [
+      _c("label", [_vm._v("Enredo")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "w-full justify-center flex mt-10" }, [
+      _c("label", [_vm._v("Gráfico")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "w-full justify-center flex mt-10" }, [
+      _c("label", [_vm._v("Áudio")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "text-center" }, [
+      _c("h1", [_vm._v("Avaliações")])
+    ])
+  }
+]
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -22041,7 +24127,188 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_loading_overlay___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue_loading_overlay__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_loading_overlay_dist_vue_loading_css__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_loading_overlay_dist_vue_loading_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_vue_loading_overlay_dist_vue_loading_css__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_User__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_axios__ = __webpack_require__(57);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_axios__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -22237,6 +24504,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             fullPage: true,
             showCreateModal: false,
             showEditModal: false,
+            showDeleteModal: false,
+            showEvaluationModal: false,
 
             isAdmin: false,
 
@@ -22250,6 +24519,24 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             editingGameDescription: '',
             editingGameCover: 'default_cover.png',
             editingGameParentalRating: 0,
+
+            deletingGameId: 0,
+            evaluatingGameId: 0,
+
+            newEvaluationTitle: '',
+            newEvaluationDescription: '',
+
+            newEvaluationGMObjective: 50,
+            newEvaluationGMChallenge: 50,
+            newEvaluationGMRule: 50,
+            newEvaluationGMControl: 50,
+
+            newEvaluationSTScenario: 50,
+            newEvaluationSTCharacterBuilding: 50,
+            newEvaluationSTPlot: 50,
+
+            newEvaluationAVGraphic: 50,
+            newEvaluationAVAudio: 50,
 
             searchGameTitle: '',
 
@@ -22307,6 +24594,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         toggleEditModal: function toggleEditModal() {
             this.showEditModal = !this.showEditModal;
         },
+        toggleDeleteModal: function toggleDeleteModal() {
+            this.showDeleteModal = !this.showDeleteModal;
+        },
+        toggleEvaluationModal: function toggleEvaluationModal() {
+            this.showEvaluationModal = !this.showEvaluationModal;
+        },
         addNewGame: function addNewGame() {
             var _this2 = this;
 
@@ -22338,6 +24631,35 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 _this2.isLoading = false;
             });
         },
+        evaluateGame: function evaluateGame() {
+            var _this3 = this;
+
+            this.isLoading = true;
+
+            var payload = {
+                gameId: this.evaluatingGameId,
+                title: this.newEvaluationTitle,
+                description: this.newEvaluationDescription,
+                objective: this.newEvaluationGMObjective,
+                challenge: this.newEvaluationGMChallenge,
+                rule: this.newEvaluationGMRule,
+                control: this.newEvaluationGMControl,
+                scenario: this.newEvaluationSTScenario,
+                characterBuilding: this.newEvaluationSTCharacterBuilding,
+                plot: this.newEvaluationSTPlot,
+                graphic: this.newEvaluationAVGraphic,
+                audio: this.newEvaluationAVAudio
+            };
+
+            __WEBPACK_IMPORTED_MODULE_2_axios___default.a.post('/add-evaluation', payload).then(function (response) {
+                if (response.data === 'evaluated') {
+                    _this3.$router.push('/evaluations');
+                }
+
+                _this3.toggleEvaluationModal();
+                _this3.isLoading = false;
+            });
+        },
         prepareGameEdit: function prepareGameEdit(game) {
             this.editingGameId = game.id;
             this.editingGameTitle = game.title;
@@ -22345,6 +24667,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.editingGameCover = game.cover;
             this.editingGameParentalRating = game.parental_rating;
             this.toggleEditModal();
+        },
+        prepareGameDelete: function prepareGameDelete(game) {
+            this.deletingGameId = game.id;
+            this.toggleDeleteModal();
+        },
+        prepareEvaluation: function prepareEvaluation(game) {
+            this.evaluatingGameId = game.id;
+            this.toggleEvaluationModal();
         },
 
         // prepareGameCategoriesEdit(category) {
@@ -22360,7 +24690,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.editingGameParentalRating = 0;
         },
         editGame: function editGame() {
-            var _this3 = this;
+            var _this4 = this;
 
             this.isLoading = true;
 
@@ -22374,13 +24704,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             this.$https.post('/edit-game', payload).then(function (response) {
                 if (response.data === 'failed') {
-                    _this3.isLoading = false;
+                    _this4.isLoading = false;
                     return;
                 }
 
-                var gameId = _this3.editingGameId;
+                var gameId = _this4.editingGameId;
 
-                _this3.games.forEach(function (currentGame, index, games) {
+                _this4.games.forEach(function (currentGame, index, games) {
                     if (currentGame.id === gameId) {
                         games[index].title = response.data.title;
                         games[index].cover = response.data.cover;
@@ -22389,63 +24719,64 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     }
                 });
 
-                _this3.toggleEditModal();
-                _this3.cancelGameEdit();
-
-                _this3.isLoading = false;
-            });
-        },
-        deleteGame: function deleteGame(game) {
-            var _this4 = this;
-
-            this.isLoading = true;
-
-            var payload = {
-                game: game.id
-            };
-
-            this.$https.post('/delete-game', payload).then(function (response) {
-                if (response.data !== 'deleted') {
-                    _this4.isLoading = false;
-                    return;
-                }
-
-                _this4.games.forEach(function (currentGame, index, games) {
-                    if (currentGame.id === game.id) {
-                        games.splice(index, 1);
-                    }
-                });
+                _this4.toggleEditModal();
+                _this4.cancelGameEdit();
 
                 _this4.isLoading = false;
             });
         },
-        loadFile: function loadFile(event) {
+        deleteGame: function deleteGame(gameId) {
             var _this5 = this;
+
+            this.isLoading = true;
+
+            var payload = {
+                game: gameId
+            };
+
+            this.$https.post('/delete-game', payload).then(function (response) {
+                if (response.data !== 'deleted') {
+                    _this5.isLoading = false;
+                    return;
+                }
+
+                _this5.games.forEach(function (currentGame, index, games) {
+                    if (currentGame.id === gameId) {
+                        games.splice(index, 1);
+                    }
+                });
+
+                _this5.toggleDeleteModal();
+                _this5.isLoading = false;
+            });
+        },
+        loadFile: function loadFile(event) {
+            var _this6 = this;
 
             var file = event.target.files[0];
 
             var reader = new FileReader();
 
             reader.onload = function (event) {
-                _this5.isLoading = true;
+                _this6.isLoading = true;
 
-                _this5.image = event.target.result;
+                _this6.image = event.target.result;
 
                 var payload = {
                     image: event.target.result
                 };
 
-                _this5.$https.post('/load-cover', payload).then(function (response) {
+                _this6.$https.post('/load-cover', payload).then(function (response) {
                     console.log('response: ' + response.data);
                     switch (response.data) {
                         case 'invalidExtension':
                             var options = { title: 'Extensão inválida', size: 'sm' };
-                            _this5.$dialogs.alert('Tente utilizar uma imagem com extensão .png ou .jpg', options);
+                            _this6.$dialogs.alert('Tente utilizar uma imagem com extensão .png ou .jpg', options);
                             break;
                         default:
-                            if (_this5.showCreateModal) _this5.newGameCover = response.data;
-                            if (_this5.showEditModal) _this5.editingGameCover = response.data;
-                            _this5.isLoading = false;
+                            if (_this6.showCreateModal) _this6.newGameCover = response.data;
+                            if (_this6.showEditModal) _this6.editingGameCover = response.data;
+                            _this6.isLoading = false;
                     }
                 });
             };
@@ -23412,6 +25743,686 @@ var render = function() {
         }
       }),
       _vm._v(" "),
+      _vm.showDeleteModal
+        ? _c(
+            "div",
+            {
+              staticClass:
+                "w-full grid justify-items-center text-white overflow-x-hidden overflow-y-auto over fixed inset-0 z-50 outline-none focus:outline-none justify-center items-center flex-none full-screen"
+            },
+            [
+              _c(
+                "div",
+                { staticClass: "relative w-auto my-6 mx-auto max-w-6xl flex" },
+                [
+                  _c("div", { staticClass: "w-1/5" }),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      staticClass:
+                        "border-0 rounded-lg shadow-lg relative flex-none flex-col w-3/5 full-screen bg-purple outline-none focus:outline-none"
+                    },
+                    [
+                      _c(
+                        "div",
+                        {
+                          staticClass:
+                            "flex items-start justify-between p-5 border-b border-solid border-purple-darker rounded-t"
+                        },
+                        [
+                          _c("h3", { staticClass: "text-3xl font-semibold" }, [
+                            _vm._v(
+                              "\n                            Excluir Jogo\n                        "
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c(
+                            "button",
+                            {
+                              staticClass:
+                                "p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none",
+                              on: {
+                                click: function($event) {
+                                  return _vm.toggleDeleteModal()
+                                }
+                              }
+                            },
+                            [
+                              _c(
+                                "span",
+                                {
+                                  staticClass:
+                                    "bg-transparent text-white opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none"
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                            ×\n                          "
+                                  )
+                                ]
+                              )
+                            ]
+                          )
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _vm._m(0),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        {
+                          staticClass:
+                            "flex items-center justify-end p-6 border-t border-solid border-purple-darker rounded-b"
+                        },
+                        [
+                          _c(
+                            "button",
+                            {
+                              staticClass:
+                                "text-white bg-transparent border border-solid border-red-500 hover:bg-red-500 hover:text-white active:bg-red-600 font-bold uppercase text-sm px-6 py-3 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150",
+                              attrs: { type: "button" },
+                              on: {
+                                click: function($event) {
+                                  return _vm.toggleDeleteModal()
+                                }
+                              }
+                            },
+                            [
+                              _vm._v(
+                                "\n                            Cancelar\n                        "
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "button",
+                            {
+                              staticClass:
+                                "text-white background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150",
+                              attrs: { type: "button" },
+                              on: {
+                                click: function($event) {
+                                  return _vm.deleteGame(_vm.deletingGameId)
+                                }
+                              }
+                            },
+                            [
+                              _vm._v(
+                                "\n                            Excluir\n                        "
+                              )
+                            ]
+                          )
+                        ]
+                      )
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "w-1/5" })
+                ]
+              )
+            ]
+          )
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.showDeleteModal
+        ? _c("div", {
+            staticClass: "opacity-25 fixed inset-0 z-40 bg-black full-screen"
+          })
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.showEvaluationModal
+        ? _c(
+            "div",
+            {
+              staticClass:
+                "w-full grid justify-items-center text-white overflow-x-hidden overflow-y-auto over fixed inset-0 z-50 outline-none focus:outline-none justify-center items-center flex-none full-screen"
+            },
+            [
+              _c(
+                "div",
+                { staticClass: "relative w-auto my-6 mx-auto max-w-6xl flex" },
+                [
+                  _c("div", { staticClass: "w-1/5" }),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      staticClass:
+                        "border-0 rounded-lg shadow-lg relative flex-none flex-col w-3/5 full-screen bg-purple outline-none focus:outline-none"
+                    },
+                    [
+                      _c(
+                        "div",
+                        {
+                          staticClass:
+                            "flex items-start justify-between p-5 border-b border-solid border-purple-darker rounded-t"
+                        },
+                        [
+                          _c("h3", { staticClass: "text-3xl font-semibold" }, [
+                            _vm._v(
+                              "\n                            Avaliar Jogo\n                        "
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c(
+                            "button",
+                            {
+                              staticClass:
+                                "p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none",
+                              on: {
+                                click: function($event) {
+                                  return _vm.toggleEvaluationModal()
+                                }
+                              }
+                            },
+                            [
+                              _c(
+                                "span",
+                                {
+                                  staticClass:
+                                    "bg-transparent text-white opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none"
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                            ×\n                          "
+                                  )
+                                ]
+                              )
+                            ]
+                          )
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        { staticClass: "w-full relative p-6 flex-none" },
+                        [
+                          _c("div", { staticClass: "width-high flex-auto" }, [
+                            _c(
+                              "div",
+                              {
+                                staticClass:
+                                  "w-full justify-center flex mt-10 mb-6"
+                              },
+                              [
+                                _c("input", {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: _vm.newEvaluationTitle,
+                                      expression: "newEvaluationTitle"
+                                    }
+                                  ],
+                                  staticClass: "h-10",
+                                  attrs: {
+                                    type: "text",
+                                    placeholder: "Título do Jogo"
+                                  },
+                                  domProps: { value: _vm.newEvaluationTitle },
+                                  on: {
+                                    input: function($event) {
+                                      if ($event.target.composing) {
+                                        return
+                                      }
+                                      _vm.newEvaluationTitle =
+                                        $event.target.value
+                                    }
+                                  }
+                                })
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "div",
+                              {
+                                staticClass:
+                                  "w-full justify-center flex mt-10 mb-6"
+                              },
+                              [
+                                _c("textarea", {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: _vm.newEvaluationDescription,
+                                      expression: "newEvaluationDescription"
+                                    }
+                                  ],
+                                  attrs: {
+                                    cols: "30",
+                                    rows: "10",
+                                    required: "",
+                                    autofocus: "",
+                                    placeholder: "Descrição da Avaliação"
+                                  },
+                                  domProps: {
+                                    value: _vm.newEvaluationDescription
+                                  },
+                                  on: {
+                                    input: function($event) {
+                                      if ($event.target.composing) {
+                                        return
+                                      }
+                                      _vm.newEvaluationDescription =
+                                        $event.target.value
+                                    }
+                                  }
+                                })
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _vm._m(1),
+                            _vm._v(" "),
+                            _c(
+                              "div",
+                              {
+                                staticClass: "w-full justify-center flex mb-6"
+                              },
+                              [
+                                _c("div", { staticClass: "w-1/3" }, [
+                                  _vm._m(2),
+                                  _vm._v(" "),
+                                  _c(
+                                    "div",
+                                    {
+                                      staticClass:
+                                        "w-full justify-center flex mb-6"
+                                    },
+                                    [
+                                      _c("p", [_vm._v("0")]),
+                                      _vm._v(" "),
+                                      _c("input", {
+                                        directives: [
+                                          {
+                                            name: "model",
+                                            rawName: "v-model",
+                                            value: _vm.newEvaluationGMChallenge,
+                                            expression:
+                                              "newEvaluationGMChallenge"
+                                          }
+                                        ],
+                                        attrs: { type: "range" },
+                                        domProps: {
+                                          value: _vm.newEvaluationGMChallenge
+                                        },
+                                        on: {
+                                          __r: function($event) {
+                                            _vm.newEvaluationGMChallenge =
+                                              $event.target.value
+                                          }
+                                        }
+                                      }),
+                                      _vm._v(" "),
+                                      _c("p", [_vm._v("100")])
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _vm._m(3),
+                                  _vm._v(" "),
+                                  _c(
+                                    "div",
+                                    {
+                                      staticClass:
+                                        "w-full justify-center flex mb-6"
+                                    },
+                                    [
+                                      _c("p", [_vm._v("0")]),
+                                      _vm._v(" "),
+                                      _c("input", {
+                                        directives: [
+                                          {
+                                            name: "model",
+                                            rawName: "v-model",
+                                            value: _vm.newEvaluationGMControl,
+                                            expression: "newEvaluationGMControl"
+                                          }
+                                        ],
+                                        attrs: { type: "range" },
+                                        domProps: {
+                                          value: _vm.newEvaluationGMControl
+                                        },
+                                        on: {
+                                          __r: function($event) {
+                                            _vm.newEvaluationGMControl =
+                                              $event.target.value
+                                          }
+                                        }
+                                      }),
+                                      _vm._v(" "),
+                                      _c("p", [_vm._v("100")])
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _vm._m(4),
+                                  _vm._v(" "),
+                                  _c(
+                                    "div",
+                                    {
+                                      staticClass:
+                                        "w-full justify-center flex mb-6"
+                                    },
+                                    [
+                                      _c("p", [_vm._v("0")]),
+                                      _vm._v(" "),
+                                      _c("input", {
+                                        directives: [
+                                          {
+                                            name: "model",
+                                            rawName: "v-model",
+                                            value: _vm.newEvaluationGMObjective,
+                                            expression:
+                                              "newEvaluationGMObjective"
+                                          }
+                                        ],
+                                        attrs: { type: "range" },
+                                        domProps: {
+                                          value: _vm.newEvaluationGMObjective
+                                        },
+                                        on: {
+                                          __r: function($event) {
+                                            _vm.newEvaluationGMObjective =
+                                              $event.target.value
+                                          }
+                                        }
+                                      }),
+                                      _vm._v(" "),
+                                      _c("p", [_vm._v("100")])
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _vm._m(5),
+                                  _vm._v(" "),
+                                  _c(
+                                    "div",
+                                    {
+                                      staticClass:
+                                        "w-full justify-center flex mb-6"
+                                    },
+                                    [
+                                      _c("p", [_vm._v("0")]),
+                                      _vm._v(" "),
+                                      _c("input", {
+                                        directives: [
+                                          {
+                                            name: "model",
+                                            rawName: "v-model",
+                                            value: _vm.newEvaluationGMRule,
+                                            expression: "newEvaluationGMRule"
+                                          }
+                                        ],
+                                        attrs: { type: "range" },
+                                        domProps: {
+                                          value: _vm.newEvaluationGMRule
+                                        },
+                                        on: {
+                                          __r: function($event) {
+                                            _vm.newEvaluationGMRule =
+                                              $event.target.value
+                                          }
+                                        }
+                                      }),
+                                      _vm._v(" "),
+                                      _c("p", [_vm._v("100")])
+                                    ]
+                                  )
+                                ]),
+                                _vm._v(" "),
+                                _c("div", { staticClass: "w-1/3" }, [
+                                  _vm._m(6),
+                                  _vm._v(" "),
+                                  _c(
+                                    "div",
+                                    {
+                                      staticClass:
+                                        "w-full justify-center flex mb-6"
+                                    },
+                                    [
+                                      _c("p", [_vm._v("0")]),
+                                      _vm._v(" "),
+                                      _c("input", {
+                                        directives: [
+                                          {
+                                            name: "model",
+                                            rawName: "v-model",
+                                            value: _vm.newEvaluationSTScenario,
+                                            expression:
+                                              "newEvaluationSTScenario"
+                                          }
+                                        ],
+                                        attrs: { type: "range" },
+                                        domProps: {
+                                          value: _vm.newEvaluationSTScenario
+                                        },
+                                        on: {
+                                          __r: function($event) {
+                                            _vm.newEvaluationSTScenario =
+                                              $event.target.value
+                                          }
+                                        }
+                                      }),
+                                      _vm._v(" "),
+                                      _c("p", [_vm._v("100")])
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _vm._m(7),
+                                  _vm._v(" "),
+                                  _c(
+                                    "div",
+                                    {
+                                      staticClass:
+                                        "w-full justify-center flex mb-6"
+                                    },
+                                    [
+                                      _c("p", [_vm._v("0")]),
+                                      _vm._v(" "),
+                                      _c("input", {
+                                        directives: [
+                                          {
+                                            name: "model",
+                                            rawName: "v-model",
+                                            value:
+                                              _vm.newEvaluationSTCharacterBuilding,
+                                            expression:
+                                              "newEvaluationSTCharacterBuilding"
+                                          }
+                                        ],
+                                        attrs: { type: "range" },
+                                        domProps: {
+                                          value:
+                                            _vm.newEvaluationSTCharacterBuilding
+                                        },
+                                        on: {
+                                          __r: function($event) {
+                                            _vm.newEvaluationSTCharacterBuilding =
+                                              $event.target.value
+                                          }
+                                        }
+                                      }),
+                                      _vm._v(" "),
+                                      _c("p", [_vm._v("100")])
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _vm._m(8),
+                                  _vm._v(" "),
+                                  _c(
+                                    "div",
+                                    {
+                                      staticClass:
+                                        "w-full justify-center flex mb-6"
+                                    },
+                                    [
+                                      _c("p", [_vm._v("0")]),
+                                      _vm._v(" "),
+                                      _c("input", {
+                                        directives: [
+                                          {
+                                            name: "model",
+                                            rawName: "v-model",
+                                            value: _vm.newEvaluationSTPlot,
+                                            expression: "newEvaluationSTPlot"
+                                          }
+                                        ],
+                                        attrs: { type: "range" },
+                                        domProps: {
+                                          value: _vm.newEvaluationSTPlot
+                                        },
+                                        on: {
+                                          __r: function($event) {
+                                            _vm.newEvaluationSTPlot =
+                                              $event.target.value
+                                          }
+                                        }
+                                      }),
+                                      _vm._v(" "),
+                                      _c("p", [_vm._v("100")])
+                                    ]
+                                  )
+                                ]),
+                                _vm._v(" "),
+                                _c("div", { staticClass: "w-1/3" }, [
+                                  _vm._m(9),
+                                  _vm._v(" "),
+                                  _c(
+                                    "div",
+                                    {
+                                      staticClass:
+                                        "w-full justify-center flex mb-6"
+                                    },
+                                    [
+                                      _c("p", [_vm._v("0")]),
+                                      _vm._v(" "),
+                                      _c("input", {
+                                        directives: [
+                                          {
+                                            name: "model",
+                                            rawName: "v-model",
+                                            value: _vm.newEvaluationAVGraphic,
+                                            expression: "newEvaluationAVGraphic"
+                                          }
+                                        ],
+                                        attrs: { type: "range" },
+                                        domProps: {
+                                          value: _vm.newEvaluationAVGraphic
+                                        },
+                                        on: {
+                                          __r: function($event) {
+                                            _vm.newEvaluationAVGraphic =
+                                              $event.target.value
+                                          }
+                                        }
+                                      }),
+                                      _vm._v(" "),
+                                      _c("p", [_vm._v("100")])
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _vm._m(10),
+                                  _vm._v(" "),
+                                  _c(
+                                    "div",
+                                    {
+                                      staticClass:
+                                        "w-full justify-center flex mb-6"
+                                    },
+                                    [
+                                      _c("p", [_vm._v("0")]),
+                                      _vm._v(" "),
+                                      _c("input", {
+                                        directives: [
+                                          {
+                                            name: "model",
+                                            rawName: "v-model",
+                                            value: _vm.newEvaluationAVAudio,
+                                            expression: "newEvaluationAVAudio"
+                                          }
+                                        ],
+                                        attrs: { type: "range" },
+                                        domProps: {
+                                          value: _vm.newEvaluationAVAudio
+                                        },
+                                        on: {
+                                          __r: function($event) {
+                                            _vm.newEvaluationAVAudio =
+                                              $event.target.value
+                                          }
+                                        }
+                                      }),
+                                      _vm._v(" "),
+                                      _c("p", [_vm._v("100")])
+                                    ]
+                                  )
+                                ])
+                              ]
+                            )
+                          ])
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        {
+                          staticClass:
+                            "flex items-center justify-end p-6 border-t border-solid border-purple-darker rounded-b"
+                        },
+                        [
+                          _c(
+                            "button",
+                            {
+                              staticClass:
+                                "text-white bg-transparent border border-solid border-red-500 hover:bg-red-500 hover:text-white active:bg-red-600 font-bold uppercase text-sm px-6 py-3 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150",
+                              attrs: { type: "button" },
+                              on: {
+                                click: function($event) {
+                                  return _vm.toggleEvaluationModal()
+                                }
+                              }
+                            },
+                            [
+                              _vm._v(
+                                "\n                            Fechar\n                        "
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "button",
+                            {
+                              staticClass:
+                                "text-white background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150",
+                              attrs: { type: "button" },
+                              on: {
+                                click: function($event) {
+                                  return _vm.evaluateGame()
+                                }
+                              }
+                            },
+                            [
+                              _vm._v(
+                                "\n                            Avaliar Jogo\n                        "
+                              )
+                            ]
+                          )
+                        ]
+                      )
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "w-1/5" })
+                ]
+              )
+            ]
+          )
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.showEvaluationModal
+        ? _c("div", {
+            staticClass: "opacity-25 fixed inset-0 z-40 bg-black full-screen"
+          })
+        : _vm._e(),
+      _vm._v(" "),
       _vm.showCreateModal
         ? _c(
             "div",
@@ -23738,6 +26749,12 @@ var render = function() {
               )
             ]
           )
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.showCreateModal
+        ? _c("div", {
+            staticClass: "opacity-25 fixed inset-0 z-40 bg-black full-screen"
+          })
         : _vm._e(),
       _vm._v(" "),
       _vm.showEditModal
@@ -24070,13 +27087,13 @@ var render = function() {
           )
         : _vm._e(),
       _vm._v(" "),
-      _vm.showCreateModal
+      _vm.showEditModal
         ? _c("div", {
             staticClass: "opacity-25 fixed inset-0 z-40 bg-black full-screen"
           })
         : _vm._e(),
       _vm._v(" "),
-      _vm._m(0),
+      _vm._m(11),
       _vm._v(" "),
       _vm.isAdmin
         ? _c("div", { staticClass: "w-full justify-center flex mt-10 mb-6" }, [
@@ -24155,54 +27172,82 @@ var render = function() {
             _c("p", [_vm._v("Categorias: -")])
           ]),
           _vm._v(" "),
-          _c("div", { staticClass: "w-2/5" }, [
-            _vm.isAdmin
-              ? _c(
-                  "button",
-                  {
-                    staticClass:
-                      "bg-purple w-1/4 text-white h-8 font-bold rounded-lg",
-                    on: {
-                      click: function($event) {
-                        return _vm.prepareGameCategoriesEdit(game)
+          _c("div", { staticClass: "w-2/5 flex-none" }, [
+            _c("div", { staticClass: "w-full mb-6" }, [
+              _vm.isAdmin
+                ? _c(
+                    "button",
+                    {
+                      staticClass:
+                        "bg-purple w-1/4 text-white h-8 font-bold rounded-lg",
+                      on: {
+                        click: function($event) {
+                          return _vm.prepareGameCategoriesEdit(game)
+                        }
                       }
-                    }
-                  },
-                  [_vm._v("Categorias")]
-                )
-              : _vm._e(),
+                    },
+                    [_vm._v("Categorias")]
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.isAdmin
+                ? _c(
+                    "button",
+                    {
+                      staticClass:
+                        "bg-purple w-1/4 text-white h-8 font-bold rounded-lg",
+                      on: {
+                        click: function($event) {
+                          return _vm.prepareGameEdit(game)
+                        }
+                      }
+                    },
+                    [_vm._v("Editar")]
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.isAdmin
+                ? _c(
+                    "button",
+                    {
+                      staticClass:
+                        "bg-purple w-1/4 text-white h-8 font-bold rounded-lg",
+                      on: {
+                        click: function($event) {
+                          return _vm.prepareGameDelete(game)
+                        }
+                      }
+                    },
+                    [_vm._v("Excluir")]
+                  )
+                : _vm._e()
+            ]),
             _vm._v(" "),
-            _vm.isAdmin
-              ? _c(
-                  "button",
-                  {
-                    staticClass:
-                      "bg-purple w-1/4 text-white h-8 font-bold rounded-lg",
-                    on: {
-                      click: function($event) {
-                        return _vm.prepareGameEdit(game)
-                      }
+            _c("div", { staticClass: "w-full" }, [
+              _c(
+                "button",
+                {
+                  staticClass:
+                    "bg-purple w-2/5 text-white h-8 font-bold rounded-lg",
+                  on: { click: function($event) {} }
+                },
+                [_vm._v("Ver Detalhes")]
+              ),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass:
+                    "bg-purple w-2/5 text-white h-8 font-bold rounded-lg",
+                  on: {
+                    click: function($event) {
+                      return _vm.prepareEvaluation(game)
                     }
-                  },
-                  [_vm._v("Editar")]
-                )
-              : _vm._e(),
-            _vm._v(" "),
-            _vm.isAdmin
-              ? _c(
-                  "button",
-                  {
-                    staticClass:
-                      "bg-purple w-1/4 text-white h-8 font-bold rounded-lg",
-                    on: {
-                      click: function($event) {
-                        return _vm.deleteGame(game)
-                      }
-                    }
-                  },
-                  [_vm._v("Excluir")]
-                )
-              : _vm._e()
+                  }
+                },
+                [_vm._v("Avaliar")]
+              )
+            ])
           ])
         ])
       })
@@ -24211,6 +27256,96 @@ var render = function() {
   )
 }
 var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "w-full relative p-6 flex-none" }, [
+      _c("div", { staticClass: "flex-auto" }, [
+        _c("p", [_vm._v("Tem certeza que deseja exluir este jogo?")])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "w-full justify-center flex mt-10" }, [
+      _c("h2", [_vm._v("Notas Técnicas")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "w-full justify-center flex mt-10" }, [
+      _c("label", [_vm._v("Desafio")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "w-full justify-center flex mt-10" }, [
+      _c("label", [_vm._v("Jogabilidade")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "w-full justify-center flex mt-10" }, [
+      _c("label", [_vm._v("Objetivo")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "w-full justify-center flex mt-10" }, [
+      _c("label", [_vm._v("Regras")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "w-full justify-center flex mt-10" }, [
+      _c("label", [_vm._v("Cenário")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "w-full justify-center flex mt-10" }, [
+      _c("label", [_vm._v("Construção de Personagem")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "w-full justify-center flex mt-10" }, [
+      _c("label", [_vm._v("Enredo")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "w-full justify-center flex mt-10" }, [
+      _c("label", [_vm._v("Gráfico")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "w-full justify-center flex mt-10" }, [
+      _c("label", [_vm._v("Áudio")])
+    ])
+  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -25642,6 +28777,49 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -25652,9 +28830,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             isLoading: false,
             fullPage: true,
 
+            showDeleteModal: false,
+
             newCategoryName: '',
             editingCategory: '',
             editingCategoryId: 0,
+
+            deletingCategoryId: 0,
+
             categories: []
         };
     },
@@ -25702,6 +28885,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         });
     },
     methods: {
+        toggleDeleteModal: function toggleDeleteModal() {
+            this.showDeleteModal = !this.showDeleteModal;
+        },
         addNewCategory: function addNewCategory() {
             var _this2 = this;
 
@@ -25725,6 +28911,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             console.log('FOI?');
             this.editingCategory = category.name;
             this.editingCategoryId = category.id;
+        },
+        prepareCategoryDelete: function prepareCategoryDelete(category) {
+            this.deletingCategoryId = category.id;
+            this.toggleDeleteModal();
         },
         cancelCategoryEdit: function cancelCategoryEdit() {
             this.editingCategory = '';
@@ -25757,13 +28947,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 _this3.isLoading = false;
             });
         },
-        deleteCategory: function deleteCategory(category) {
+        deleteCategory: function deleteCategory(categoryId) {
             var _this4 = this;
 
             this.isLoading = true;
 
             var payload = {
-                category: category.id
+                category: categoryId
             };
 
             this.$https.post('/delete-category', payload).then(function (response) {
@@ -25773,11 +28963,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 }
 
                 _this4.categories.forEach(function (currentCategory, index, categories) {
-                    if (currentCategory.id === category.id) {
+                    if (currentCategory.id === categoryId) {
                         categories.splice(index, 1);
                     }
                 });
 
+                _this4.toggleDeleteModal();
                 _this4.isLoading = false;
             });
         }
@@ -25809,7 +29000,136 @@ var render = function() {
         }
       }),
       _vm._v(" "),
-      _vm._m(0),
+      _vm.showDeleteModal
+        ? _c(
+            "div",
+            {
+              staticClass:
+                "w-full grid justify-items-center text-white overflow-x-hidden overflow-y-auto over fixed inset-0 z-50 outline-none focus:outline-none justify-center items-center flex-none full-screen"
+            },
+            [
+              _c(
+                "div",
+                { staticClass: "relative w-auto my-6 mx-auto max-w-6xl flex" },
+                [
+                  _c("div", { staticClass: "w-1/5" }),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      staticClass:
+                        "border-0 rounded-lg shadow-lg relative flex-none flex-col w-3/5 full-screen bg-purple outline-none focus:outline-none"
+                    },
+                    [
+                      _c(
+                        "div",
+                        {
+                          staticClass:
+                            "flex items-start justify-between p-5 border-b border-solid border-purple-darker rounded-t"
+                        },
+                        [
+                          _c("h3", { staticClass: "text-3xl font-semibold" }, [
+                            _vm._v(
+                              "\n                        Excluir Categoria\n                    "
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c(
+                            "button",
+                            {
+                              staticClass:
+                                "p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none",
+                              on: {
+                                click: function($event) {
+                                  return _vm.toggleDeleteModal()
+                                }
+                              }
+                            },
+                            [
+                              _c(
+                                "span",
+                                {
+                                  staticClass:
+                                    "bg-transparent text-white opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none"
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                        ×\n                      "
+                                  )
+                                ]
+                              )
+                            ]
+                          )
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _vm._m(0),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        {
+                          staticClass:
+                            "flex items-center justify-end p-6 border-t border-solid border-purple-darker rounded-b"
+                        },
+                        [
+                          _c(
+                            "button",
+                            {
+                              staticClass:
+                                "text-white bg-transparent border border-solid border-red-500 hover:bg-red-500 hover:text-white active:bg-red-600 font-bold uppercase text-sm px-6 py-3 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150",
+                              attrs: { type: "button" },
+                              on: {
+                                click: function($event) {
+                                  return _vm.toggleDeleteModal()
+                                }
+                              }
+                            },
+                            [
+                              _vm._v(
+                                "\n                        Cancelar\n                    "
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "button",
+                            {
+                              staticClass:
+                                "text-white background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150",
+                              attrs: { type: "button" },
+                              on: {
+                                click: function($event) {
+                                  return _vm.deleteCategory(
+                                    _vm.deletingCategoryId
+                                  )
+                                }
+                              }
+                            },
+                            [
+                              _vm._v(
+                                "\n                        Excluir\n                    "
+                              )
+                            ]
+                          )
+                        ]
+                      )
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "w-1/5" })
+                ]
+              )
+            ]
+          )
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.showDeleteModal
+        ? _c("div", {
+            staticClass: "opacity-25 fixed inset-0 z-40 bg-black full-screen"
+          })
+        : _vm._e(),
+      _vm._v(" "),
+      _vm._m(1),
       _vm._v(" "),
       _c("div", { staticClass: "w-full justify-center flex mt-10 mb-6" }, [
         _c("input", {
@@ -25940,7 +29260,7 @@ var render = function() {
                         "bg-purple w-1/3 text-white h-8 font-bold rounded-lg",
                       on: {
                         click: function($event) {
-                          return _vm.deleteCategory(category)
+                          return _vm.prepareCategoryDelete(category)
                         }
                       }
                     },
@@ -25956,6 +29276,16 @@ var render = function() {
   )
 }
 var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "w-full relative p-6 flex-none" }, [
+      _c("div", { staticClass: "flex-auto" }, [
+        _c("p", [_vm._v("Tem certeza que deseja exluir esta categoria?")])
+      ])
+    ])
+  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
