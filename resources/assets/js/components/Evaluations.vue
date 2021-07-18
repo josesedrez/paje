@@ -431,12 +431,11 @@ export default {
 
         axios.post('/all-evaluations')
             .then((response) => {
-                console.log(response.data);
                 if (response.data) {
                     this.evaluations = response.data;
                     this.filteredEvaluations = this.evaluations;
 
-                    if (this.$root.evaluationSearch !== '') {
+                    if (typeof this.$root.evaluationSearch !== 'undefined') {
                         this.searchingParameter = this.$root.evaluationSearch;
                         this.filter();
                         this.$root.evaluationSearch = '';
@@ -581,7 +580,7 @@ export default {
         filter() {
             this.isLoading = true;
 
-            let filter = this.searchingParameter;
+            const filter = this.searchingParameter;
 
             this.filteredEvaluations = this.evaluations.filter(function (item) {
                 return item.title.toLowerCase().includes(filter.toLowerCase()) || item.userName.toLowerCase().includes(filter.toLowerCase()) || item.gameTitle.toLowerCase().includes(filter.toLowerCase());
