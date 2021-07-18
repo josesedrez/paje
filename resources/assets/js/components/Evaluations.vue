@@ -209,8 +209,12 @@
                             <div class="w-full justify-center flex mt-10 mb-6">
                                 <p>Curtidas: {{ newEvaluationLikes }}</p>
                             </div>
+
+                            <div class="w-full justify-center flex mt-10">
+                                <h2>Descrição</h2>
+                            </div>
                             <div class="w-full justify-center flex mt-10 mb-6">
-                                <p>Descrição: {{ newEvaluationDescription }}</p>
+                                <p>{{ newEvaluationDescription }}</p>
                             </div>
 
                             <div class="w-full justify-center flex mt-10">
@@ -330,17 +334,17 @@
         </div>
 
         <div class="w-full justify-center flex mt-10 mb-6">
-            <input class="h-10 w-2/5" type="text" v-model="searchingEvaluationTitle" placeholder="Título da Avaliação">
-            <button class="bg-green w-1/5 h-10 text-white font-bold" v-on:click="">Pesquisar</button>
+            <input class="h-10 w-2/5" type="text" v-model="searchingParameter" placeholder="Título, Autor, Jogo...">
+            <button class="bg-green w-1/5 h-10 text-white font-bold" v-on:click="filter()">Filtrar</button>
         </div>
 
-        <div class="flex bg-green m-1 p-1 rounded-lg" v-for="evaluation in evaluations">
+        <div class="flex bg-green m-1 p-1 rounded-lg" v-for="evaluation in filteredEvaluations">
             <div class="w-3/5">
                 <h2>{{evaluation.title}}</h2>
                 <p>Jogo: {{evaluation.gameTitle}}</p>
+                <p>Autor: {{evaluation.userName}}</p>
                 <p>Nota geral: {{evaluation.grade}}</p>
                 <p>Curtidas: 0</p>
-                <p>Descrição: {{evaluation.description}}</p>
             </div>
             <div class="w-2/5 flex-none">
                 <div class="w-full mb-6">
@@ -349,7 +353,8 @@
                 </div>
                 <div class="w-full">
                     <button class="bg-purple w-2/5 text-white h-8 font-bold rounded-lg" v-on:click="prepareEvaluationView(evaluation)">Ver Detalhes</button>
-                    <button class="bg-purple w-2/5 text-white h-8 font-bold rounded-lg" v-on:click="">Curtir</button>
+                    <button v-if="isLogged" class="bg-purple w-2/5 text-white h-8 font-bold rounded-lg" v-on:click="">Curtir</button>
+                    <button v-if="!isLogged" class="bg-grey w-2/5 text-white h-8 font-bold rounded-lg" v-on:click="">Curtir</button>
                 </div>
             </div>
         </div>
@@ -367,6 +372,8 @@ export default {
             isLoading: false,
             fullPage: true,
             isAdmin: false,
+            isLogged: false,
+            userId: 0,
 
             showDeleteModal: false,
             showEditModal: false,
@@ -396,9 +403,11 @@ export default {
             newEvaluationAVAudio: 50,
 
 
-            searchingEvaluationTitle: '',
+            searchingParameter: '',
 
-            evaluations:[]
+            evaluations: [],
+            filteredEvaluations:[]
+
         }
     },
     components: {
@@ -410,6 +419,8 @@ export default {
         this.$https.post('/current-user')
             .then((response) => {
                 if (response.data) {
+                    this.isLogged = true;
+                    this.userId = response.data.id;
                     if (response.data.is_admin) {
                         this.isAdmin = true;
                     } else {
@@ -418,11 +429,18 @@ export default {
                 }
             });
 
-        this.$https.post('/all-evaluations')
+        axios.post('/all-evaluations')
             .then((response) => {
                 console.log(response.data);
                 if (response.data) {
                     this.evaluations = response.data;
+                    this.filteredEvaluations = this.evaluations;
+
+                    if (this.$root.evaluationSearch !== '') {
+                        this.searchingParameter = this.$root.evaluationSearch;
+                        this.filter();
+                        this.$root.evaluationSearch = '';
+                    }
 
                     this.isLoading = false;
                 } else {
@@ -526,6 +544,8 @@ export default {
                         }
                     });
 
+                    this.filteredEvaluations = this.evaluations
+
                     this.toggleEditModal();
                     this.cancelEvaluationEdit();
 
@@ -552,9 +572,22 @@ export default {
                         }
                     });
 
+                    this.filteredEvaluations = this.evaluations
+
                     this.toggleDeleteModal();
                     this.isLoading = false;
                 });
+        },
+        filter() {
+            this.isLoading = true;
+
+            let filter = this.searchingParameter;
+
+            this.filteredEvaluations = this.evaluations.filter(function (item) {
+                return item.title.toLowerCase().includes(filter.toLowerCase()) || item.userName.toLowerCase().includes(filter.toLowerCase()) || item.gameTitle.toLowerCase().includes(filter.toLowerCase());
+            });
+
+            this.isLoading = false;
         }
     }
 }

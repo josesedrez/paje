@@ -42,6 +42,7 @@ class EvaluationController extends Controller
             $item->audio = $av->audio_grade;
             $item->gameTitle = $evaluation->game->title;
             $item->userId = $evaluation->user->id;
+            $item->userName = $evaluation->user->name;
 
             $response->push($item);
         }
@@ -94,7 +95,7 @@ class EvaluationController extends Controller
         }
         $gameGrade = $gameGrade / $gameEvaluations->count();
         $game->update([
-            'grade' => $gameGrade
+            'grade' => round($gameGrade)
         ]);
 
         return 'evaluated';
@@ -143,7 +144,7 @@ class EvaluationController extends Controller
             }
             $gameGrade = $gameGrade / $gameEvaluations->count();
             $game->update([
-                'grade' => $gameGrade
+                'grade' => round($gameGrade)
             ]);
 
             $gm = $evaluation->gameMechanic;
@@ -188,7 +189,7 @@ class EvaluationController extends Controller
         if ($gameEvaluations->count())
             $gameGrade = $gameGrade / $gameEvaluations->count();
         $game->update([
-            'grade' => $gameGrade
+            'grade' => round($gameGrade)
         ]);
 
         return 'deleted';

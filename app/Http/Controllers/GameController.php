@@ -8,11 +8,38 @@ use App\Http\Requests\GameValidation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use Illuminate\Support\Collection;
 
 class GameController extends Controller
 {
     public function getAllGames() {
-        return Game::orderBy('title')->get();
+        $games = Game::orderBy('title')->get();
+
+        $response = new Collection();
+
+        foreach ($games as $game) {
+            $categories = new Collection();
+            foreach ($game->categories as $category) {
+                $cat = new Collection();
+
+                $cat->put('id', $category->id);
+                $cat->put('name', $category->name);
+
+                $categories->push($cat);
+            }
+            $item = new Collection();
+            $item->put('id', $game->id);
+            $item->put('title', $game->title);
+            $item->put('grade', $game->grade);
+            $item->put('description', $game->description);
+            $item->put('parentalRating', $game->parental_rating);
+            $item->put('cover', $game->cover);
+            $item->put('categories', $categories);
+
+            $response->push($item);
+        }
+
+        return $response;
     }
 
     public function addNewGame(Request $request) {
@@ -40,6 +67,20 @@ class GameController extends Controller
         } catch (\Exception $exception) {
             return 'failed';
         }
+    }
+
+    public function editGameCategories(Request $request) {
+//        try {
+            $game = Game::find($request['gameId']);
+
+            $game->categories()->detach();
+
+            $game->categories()->attach($request['selectedCategories']);
+
+            return 'edited';
+//        } catch (\Exception $exception) {
+//            return 'failed';
+//        }
     }
 
     public function deleteGame(Request $request) {

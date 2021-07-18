@@ -7,11 +7,13 @@
 
         <div class="w-3/4 h-full flex-none">
             <div class="w-full h-48 flex">
-                <div class="w-1/3 h-48">
+                <div class="w-1/3 h-48 justify-center flex">
                     <input type="file"  accept="image/*" name="image" id="file"  @change="loadFile" style="display: none;">
-                    <p><label for="file" style="cursor: pointer;">
-                        <img class="h-48 w-full rounded-full" :src="'images/profiles/' + profile" @mouseover="showHoverProfile" @mouseleave="hideHoverProfile">
-                    </label></p>
+                    <div class="image-container flex-none">
+                        <p><label for="file" style="cursor: pointer;">
+                            <img class="h-48 w-48 rounded-full image" :src="'images/profiles/' + profile">
+                        </label></p>
+                    </div>
                 </div>
                 <div class="w-2/3 h-48 flex-none">
                     <div class="w-full h-24 pt-10 justify-center flex">
@@ -44,7 +46,6 @@
                 email: '',
                 name: '',
                 profile: '',
-                profileBackup: '',
                 image: '',
             }
         },
@@ -93,7 +94,6 @@
                                 User.getCurrentUser(response => {
                                     if (response.data) {
                                         this.profile = response.data.profile;
-                                        this.profileBackup = this.profile;
 
                                         this.isLoading = false;
                                     } else {
@@ -105,12 +105,6 @@
                 };
 
                 reader.readAsDataURL(file);
-            },
-            showHoverProfile() {
-                this.profile = 'hover_profile.png';
-            },
-            hideHoverProfile() {
-                this.profile = this.profileBackup;
             }
         }
     }

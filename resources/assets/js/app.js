@@ -19,5 +19,7 @@ Vue.use(VueCrypton(key), {
 let app = new Vue({
     el: '#app',
 
+    evaluationSearch: '',
+
     router: new VueRouter(routes)
 });

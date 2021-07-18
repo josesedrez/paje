@@ -37,7 +37,7 @@ Route::middleware('crypton')->post('/current-user', 'UserController@getCurrentUs
 Route::post('/all-users', 'UserController@getAllUsers');
 
 // EVALUATIONS
-Route::middleware('crypton')->post('/all-evaluations', 'EvaluationController@getAllEvaluations');
+Route::post('/all-evaluations', 'EvaluationController@getAllEvaluations');
 
 Route::post('/add-evaluation', 'EvaluationController@addNewEvaluation');
 
@@ -46,13 +46,15 @@ Route::post('/delete-evaluation', 'EvaluationController@deleteEvaluation');
 Route::post('/edit-evaluation', 'EvaluationController@editEvaluation');
 
 // GAMES
-Route::middleware('crypton')->post('/all-games', 'GameController@getAllGames');
+Route::post('/all-games', 'GameController@getAllGames');
 
 Route::middleware('crypton')->post('/add-game', 'GameController@addNewGame');
 
 Route::middleware('crypton')->post('/delete-game', 'GameController@deleteGame');
 
 Route::middleware('crypton')->post('/edit-game', 'GameController@editGame');
+
+Route::post('/edit-game-categories', 'GameController@editGameCategories');
 
 // CATEGORIES
 Route::middleware('crypton')->post('/all-categories', 'CategoryController@getAllCategories');

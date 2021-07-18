@@ -53,11 +53,15 @@
         </div>
 
         <div class="w-full justify-center flex mt-10 mb-6">
+            <input class="h-10 w-2/5" type="text" v-model="searchingParameter" placeholder="Filtre Categorias">
+            <button class="bg-green w-1/5 h-10 text-white font-bold" v-on:click="filter()">Filtrar</button>
+        </div>
+        <div class="w-full justify-center flex mt-10 mb-6">
             <input class="h-10 w-2/5" type="text" v-model="newCategoryName" placeholder="Nova Categoria">
             <button class="bg-green w-1/5 h-10 text-white font-bold" v-on:click="addNewCategory()">Adicionar</button>
         </div>
 
-        <div class="h-10 flex bg-green m-1 p-1 rounded-lg" v-for="category in categories">
+        <div class="h-10 flex bg-green m-1 p-1 rounded-lg" v-for="category in filteredCategories">
             <div class="w-3/5">
                 <span v-if="editingCategoryId != category.id">{{category.name}}</span>
                 <input v-if="editingCategoryId === category.id" class="h-8 w-2/5" type="text" v-model="editingCategory" placeholder="Novo Nome">
@@ -90,7 +94,10 @@
 
                 deletingCategoryId: 0,
 
-                categories:[]
+                searchingParameter: '',
+
+                categories: [],
+                filteredCategories: []
             }
         },
         components: {
@@ -127,6 +134,7 @@
                         });
 
                         this.categories = categories;
+                        this.filteredCategories = this.categories;
 
                         this.isLoading = false;
                     } else {
@@ -152,6 +160,8 @@
                             'id': response.data.id,
                             'name': response.data.name
                         });
+
+                        this.filteredCategories = this.categories;
 
                         this.newCategoryName = '';
                         this.isLoading = false;
@@ -191,6 +201,8 @@
                             }
                         });
 
+                        this.filteredCategories = this.categories;
+
                         this.cancelCategoryEdit();
 
                         this.isLoading = false;
@@ -216,9 +228,22 @@
                            }
                         });
 
+                        this.filteredCategories = this.categories;
+
                         this.toggleDeleteModal();
                         this.isLoading = false;
                     });
+            },
+            filter() {
+                this.isLoading = true;
+
+                let filter = this.searchingParameter;
+
+                this.filteredCategories = this.categories.filter(function (item) {
+                    return item.name.toLowerCase().includes(filter.toLowerCase());
+                });
+
+                this.isLoading = false;
             }
         }
     }

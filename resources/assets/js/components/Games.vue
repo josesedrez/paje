@@ -5,7 +5,7 @@
                  :is-full-page="fullPage">
         </loading>
 
-<!--        MODAL DE EXCLUSÃO-->
+        <!--        MODAL DE EXCLUSÃO-->
         <div v-if="showDeleteModal" class="w-full grid justify-items-center text-white overflow-x-hidden overflow-y-auto over fixed inset-0 z-50 outline-none focus:outline-none justify-center items-center flex-none full-screen">
             <div class="relative w-auto my-6 mx-auto max-w-6xl flex">
                 <div class="w-1/5"></div>
@@ -42,6 +42,48 @@
             </div>
         </div>
         <div v-if="showDeleteModal" class="opacity-25 fixed inset-0 z-40 bg-black full-screen"></div>
+
+
+        <!--        MODAL DE CATEGORIAS-->
+        <div v-if="showCategoriesModal" class="w-full grid justify-items-center text-white overflow-x-hidden overflow-y-auto over fixed inset-0 z-50 outline-none focus:outline-none justify-center items-center flex-none full-screen">
+            <div class="relative w-auto my-6 mx-auto max-w-6xl flex">
+                <div class="w-1/5"></div>
+                <!--content-->
+                <div class="border-0 rounded-lg shadow-lg relative flex-none flex-col w-3/5 full-screen bg-purple outline-none focus:outline-none">
+                    <!--header-->
+                    <div class="flex items-start justify-between p-5 border-b border-solid border-purple-darker rounded-t">
+                        <h3 class="text-3xl font-semibold">
+                            Categorias do Jogo
+                        </h3>
+                        <button class="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none" v-on:click="closeCategoriesModal()">
+                          <span class="bg-transparent text-white opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
+                            ×
+                          </span>
+                        </button>
+                    </div>
+                    <!--body-->
+                    <div class="w-full relative p-6 flex-none">
+                        <div class="flex-auto">
+                            <div v-for="category in categories">
+                                <input type="checkbox" v-model="category.bool">
+                                <span>{{ category.name }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!--footer-->
+                    <div class="flex items-center justify-end p-6 border-t border-solid border-purple-darker rounded-b">
+                        <button class="text-white bg-transparent border border-solid border-red-500 hover:bg-red-500 hover:text-white active:bg-red-600 font-bold uppercase text-sm px-6 py-3 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" v-on:click="closeCategoriesModal()">
+                            Cancelar
+                        </button>
+                        <button class="text-white background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" v-on:click="editGameCategories()">
+                            Aplicar
+                        </button>
+                    </div>
+                </div>
+                <div class="w-1/5"></div>
+            </div>
+        </div>
+        <div v-if="showCategoriesModal" class="opacity-25 fixed inset-0 z-40 bg-black full-screen"></div>
 
 
         <!--        MODAL DE AVALIAÇÃO-->
@@ -330,20 +372,20 @@
         </div>
 
         <div class="w-full justify-center flex mt-10 mb-6">
-            <input class="h-10 w-2/5" type="text" v-model="searchGameTitle" placeholder="Nome do Jogo">
-            <button class="bg-green w-1/5 h-10 text-white font-bold" v-on:click="">Pesquisar</button>
+            <input class="h-10 w-2/5" type="text" v-model="searchingParameter" placeholder="Título, Nota, Classificação Indicativa, Categoria...">
+            <button class="bg-green w-1/5 h-10 text-white font-bold" v-on:click="filter()">Filtrar</button>
         </div>
 
-        <div class="flex bg-green m-1 p-1 rounded-lg" v-for="game in games">
+        <div class="flex bg-green m-1 p-1 rounded-lg" v-for="game in filteredGames">
             <div class="w-1/5">
                 <img class="h-48 w-32 image rounded-sm" :src="'images/covers/' + game.cover">
             </div>
             <div class="w-2/5">
                 <h2>{{game.title}}</h2>
                 <p>Nota geral: {{game.grade}}</p>
-                <p>Classificação indicativa: {{game.parental_rating}}</p>
+                <p>Classificação indicativa: {{game.parentalRating}}</p>
                 <p>Descrição: {{game.description}}</p>
-                <p>Categorias: -</p>
+                <p>Categorias: <span v-for="category in game.categories">{{ category.name }}, </span></p>
             </div>
             <div class="w-2/5 flex-none">
                 <div class="w-full mb-6">
@@ -353,7 +395,8 @@
                 </div>
                 <div class="w-full">
                     <button class="bg-purple w-2/5 text-white h-8 font-bold rounded-lg" v-on:click="">Ver Detalhes</button>
-                    <button class="bg-purple w-2/5 text-white h-8 font-bold rounded-lg" v-on:click="prepareEvaluation(game)">Avaliar</button>
+                    <button v-if="isLogged" class="bg-purple w-2/5 text-white h-8 font-bold rounded-lg" v-on:click="prepareEvaluation(game)">Avaliar</button>
+                    <button v-if="!isLogged" class="bg-grey w-2/5 text-white h-8 font-bold rounded-lg" v-on:click="">Avaliar</button>
                 </div>
             </div>
         </div>
@@ -375,8 +418,11 @@ export default {
             showEditModal: false,
             showDeleteModal: false,
             showEvaluationModal: false,
+            showCategoriesModal: false,
 
             isAdmin: false,
+            isLogged: false,
+            isCategoryEdit: false,
 
             newGameTitle: '',
             newGameDescription: '',
@@ -409,9 +455,11 @@ export default {
             newEvaluationAVAudio: 50,
 
 
-            searchGameTitle: '',
+            searchingParameter: '',
 
-            games:[]
+            games: [],
+            filteredGames: [],
+            categories: []
         }
     },
     components: {
@@ -423,6 +471,7 @@ export default {
         this.$https.post('/current-user')
             .then((response) => {
                 if (response.data) {
+                    this.isLogged = true;
                     if (response.data.is_admin) {
                         this.isAdmin = true;
                     } else {
@@ -431,30 +480,37 @@ export default {
                 }
             });
 
-        this.$https.post('/all-games')
+        axios.post('/all-games')
             .then((response) => {
-                console.log(response.data);
                 if (response.data) {
-                    let games = response.data;
+                    this.games = response.data;
 
-                    games.forEach(function (game, index, games) {
-                        games[index] = {
-                            id: game.id,
-                            title: game.title,
-                            description: game.description,
-                            grade: game.grade,
-                            cover: game.cover,
-                            parental_rating: game.parental_rating
-                        };
-                    });
-
-                    this.games = games;
+                    this.filteredGames = this.games;
 
                     this.isLoading = false;
                 } else {
                     this.$router.push('/notFound');
                     this.isLoading = false;
                 }
+            });
+
+        axios.post('/all-categories')
+            .then((response) => {
+                if (response.data) {
+                    let categories = response.data;
+
+                    categories = categories.map((category, index) => {
+                        return {
+                            id: category.id,
+                            name: category.name,
+                            bool: false
+                        };
+                    });
+
+                    this.categories = categories;
+                }
+
+                this.isLoading = false;
             });
     },
     methods: {
@@ -470,6 +526,13 @@ export default {
         toggleEvaluationModal: function(){
             this.showEvaluationModal = !this.showEvaluationModal;
         },
+        toggleCategoriesModal: function(){
+            this.showCategoriesModal = !this.showCategoriesModal;
+        },
+        closeCategoriesModal: function(){
+            this.toggleCategoriesModal();
+            this.resetCategories();
+        },
         addNewGame() {
             this.isLoading = true;
 
@@ -482,14 +545,9 @@ export default {
 
             this.$https.post('/add-game', payload)
                 .then((response) => {
-                    this.games.unshift({
-                        'id': response.data.id,
-                        'title': response.data.title,
-                        'parental_rating': response.data.parental_rating,
-                        'cover': response.data.cover,
-                        'description': response.data.description,
-                        'grade': response.data.grade
-                    });
+                    this.games.unshift(response.data);
+
+                    this.filteredGames = this.games;
 
                     this.newGameTitle = '';
                     this.newGameParentalRating = '';
@@ -533,7 +591,7 @@ export default {
             this.editingGameTitle = game.title;
             this.editingGameDescription = game.description;
             this.editingGameCover = game.cover;
-            this.editingGameParentalRating = game.parental_rating;
+            this.editingGameParentalRating = game.parentalRating;
             this.toggleEditModal();
         },
         prepareGameDelete(game) {
@@ -544,11 +602,69 @@ export default {
             this.evaluatingGameId = game.id;
             this.toggleEvaluationModal();
         },
-        // prepareGameCategoriesEdit(category) {
-        //     console.log('FOI?');
-        //     this.editingCategory = category.name;
-        //     this.editingCategoryId = category.id;
-        // },
+        prepareGameCategoriesEdit(game) {
+            this.editingGameId = game.id;
+
+            this.categories = this.categories.map((currentCategory, index) => {
+                game.categories.forEach(function (category, i) {
+                    if (currentCategory.id === category.id) {
+                        currentCategory.bool = true;
+                    }
+                });
+
+                return currentCategory;
+            });
+
+            this.isCategoryEdit = true;
+
+            this.toggleCategoriesModal();
+        },
+        editGameCategories() {
+            this.isLoading = true;
+
+            let selectedCategories = [];
+            let formatedCategories = [];
+
+            this.categories.forEach(function (category, index) {
+                if (category.bool  === true) {
+                    selectedCategories.push(category.id);
+                    formatedCategories.push({
+                        id: category.id,
+                        name: category.name
+                    });
+                }
+            });
+
+            let payload = {
+                gameId: this.editingGameId,
+                selectedCategories: selectedCategories
+            };
+
+            axios.post('/edit-game-categories', payload)
+            .then((response) => {
+                if (response.data === 'edited') {
+                    this.games.map((game, i) => {
+                        if (game.id === payload.gameId) {
+                            game.categories = formatedCategories;
+                        }
+
+                        return game;
+                    });
+
+                    this.filteredGames = this.games;
+
+                    this.toggleCategoriesModal();
+                    this.resetCategories();
+                    this.isLoading = false;
+                }
+            });
+        },
+        resetCategories() {
+            this.categories = this.categories.map((category, i) => {
+                category.bool = false;
+                return category;
+            });
+        },
         cancelGameEdit() {
             this.editingGameId = 0;
             this.editingGameTitle = '';
@@ -578,12 +694,11 @@ export default {
 
                     this.games.forEach(function (currentGame, index, games) {
                         if (currentGame.id === gameId) {
-                            games[index].title = response.data.title;
-                            games[index].cover = response.data.cover;
-                            games[index].parental_rating = response.data.parental_rating;
-                            games[index].description = response.data.description;
+                            games[index] = response.data;
                         }
                     });
+
+                    this.filteredGames = this.games;
 
                     this.toggleEditModal();
                     this.cancelGameEdit();
@@ -611,6 +726,8 @@ export default {
                         }
                     });
 
+                    this.filteredGames = this.games;
+
                     this.toggleDeleteModal();
                     this.isLoading = false;
                 });
@@ -631,7 +748,6 @@ export default {
 
                 this.$https.post('/load-cover', payload)
                     .then((response) => {
-                    console.log('response: ' + response.data);
                     switch (response.data) {
                         case 'invalidExtension':
                             const options = {title: 'Extensão inválida', size: 'sm'}
@@ -649,6 +765,31 @@ export default {
 
             reader.readAsDataURL(file);
         },
+        filter() {
+            this.isLoading = true;
+
+            let filter = this.searchingParameter;
+
+            this.filteredGames = this.games.filter(function (item) {
+                if (item.title.toLowerCase().includes(filter.toLowerCase()))
+                    return true;
+                if (item.grade.toString().toLowerCase().includes(filter.toLowerCase()))
+                    return true;
+                if (item.parentalRating.toString().toLowerCase().includes(filter.toLowerCase()))
+                    return true;
+
+                let hasCategory = false;
+
+                item.categories.forEach((category) => {
+                    if (category.name.toLowerCase().includes(filter.toLowerCase()))
+                        hasCategory = true;
+                });
+
+                return hasCategory;
+            });
+
+            this.isLoading = false;
+        }
     }
 }
 </script>

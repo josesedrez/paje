@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\UserValidation;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -144,7 +145,22 @@ class UserController extends Controller
 
     public function getAllUsers()
     {
-        return User::all();
+        $users = User::orderBy('name')->get();
+
+        $response = new Collection();
+
+        foreach ($users as $user) {
+            $item = new Collection();
+            $item->put('id', $user->id);
+            $item->put('name', $user->name);
+            $item->put('email', $user->email);
+            $item->put('profile', $user->profile);
+            $item->put('evaluationsCount', $user->evaluations->count());
+
+            $response->push($item);
+        }
+
+        return $response;
     }
 
     public function getUserEvaluationsCount() {
