@@ -107,7 +107,7 @@
                     <div class="w-full relative p-6 flex-none">
                         <div class="width-high flex-auto">
                             <div class="w-full justify-center flex mt-10 mb-6">
-                                <input class="h-10" type="text" v-model="newEvaluationTitle" placeholder="Título do Jogo">
+                                <input class="h-10" type="text" v-model="newEvaluationTitle" placeholder="Título da Avaliação">
                             </div>
                             <div class="w-full justify-center flex mt-10 mb-6">
                                 <textarea cols="30" rows="10" required autofocus placeholder="Descrição da Avaliação" v-model="newEvaluationDescription"></textarea>
