@@ -80,37 +80,49 @@
                                     <div class="w-full justify-center flex mt-10">
                                         <label>Desafio</label>
                                     </div>
-                                    <div class="w-full justify-center flex mb-6">
+                                    <div class="w-full justify-center flex ">
                                         <p>0</p>
                                         <input type="range" v-model="newEvaluationGMChallenge">
                                         <p>100</p>
+                                    </div>
+                                    <div class="w-full justify-center flex mb-6">
+                                        <label>{{ newEvaluationGMChallenge }}</label>
                                     </div>
 
                                     <div class="w-full justify-center flex mt-10">
                                         <label>Jogabilidade</label>
                                     </div>
-                                    <div class="w-full justify-center flex mb-6">
+                                    <div class="w-full justify-center flex ">
                                         <p>0</p>
                                         <input type="range" v-model="newEvaluationGMControl">
                                         <p>100</p>
+                                    </div>
+                                    <div class="w-full justify-center flex mb-6">
+                                        <label>{{ newEvaluationGMControl }}</label>
                                     </div>
 
                                     <div class="w-full justify-center flex mt-10">
                                         <label>Objetivo</label>
                                     </div>
-                                    <div class="w-full justify-center flex mb-6">
+                                    <div class="w-full justify-center flex ">
                                         <p>0</p>
                                         <input type="range" v-model="newEvaluationGMObjective">
                                         <p>100</p>
+                                    </div>
+                                    <div class="w-full justify-center flex mb-6">
+                                        <label>{{ newEvaluationGMObjective }}</label>
                                     </div>
 
                                     <div class="w-full justify-center flex mt-10">
                                         <label>Regras</label>
                                     </div>
-                                    <div class="w-full justify-center flex mb-6">
+                                    <div class="w-full justify-center flex ">
                                         <p>0</p>
                                         <input type="range" v-model="newEvaluationGMRule">
                                         <p>100</p>
+                                    </div>
+                                    <div class="w-full justify-center flex mb-6">
+                                        <label>{{ newEvaluationGMRule }}</label>
                                     </div>
                                 </div>
 
@@ -118,28 +130,37 @@
                                     <div class="w-full justify-center flex mt-10">
                                         <label>Cenário</label>
                                     </div>
-                                    <div class="w-full justify-center flex mb-6">
+                                    <div class="w-full justify-center flex ">
                                         <p>0</p>
                                         <input type="range" v-model="newEvaluationSTScenario">
                                         <p>100</p>
+                                    </div>
+                                    <div class="w-full justify-center flex mb-6">
+                                        <label>{{ newEvaluationSTScenario }}</label>
                                     </div>
 
                                     <div class="w-full justify-center flex mt-10">
                                         <label>Construção de Personagem</label>
                                     </div>
-                                    <div class="w-full justify-center flex mb-6">
+                                    <div class="w-full justify-center flex ">
                                         <p>0</p>
                                         <input type="range" v-model="newEvaluationSTCharacterBuilding">
                                         <p>100</p>
+                                    </div>
+                                    <div class="w-full justify-center flex mb-6">
+                                        <label>{{ newEvaluationSTCharacterBuilding }}</label>
                                     </div>
 
                                     <div class="w-full justify-center flex mt-10">
                                         <label>Enredo</label>
                                     </div>
-                                    <div class="w-full justify-center flex mb-6">
+                                    <div class="w-full justify-center flex ">
                                         <p>0</p>
                                         <input type="range" v-model="newEvaluationSTPlot">
                                         <p>100</p>
+                                    </div>
+                                    <div class="w-full justify-center flex mb-6">
+                                        <label>{{ newEvaluationSTPlot }}</label>
                                     </div>
                                 </div>
 
@@ -147,19 +168,25 @@
                                     <div class="w-full justify-center flex mt-10">
                                         <label>Gráfico</label>
                                     </div>
-                                    <div class="w-full justify-center flex mb-6">
+                                    <div class="w-full justify-center flex ">
                                         <p>0</p>
                                         <input type="range" v-model="newEvaluationAVGraphic">
                                         <p>100</p>
+                                    </div>
+                                    <div class="w-full justify-center flex mb-6">
+                                        <label>{{ newEvaluationAVGraphic }}</label>
                                     </div>
 
                                     <div class="w-full justify-center flex mt-10">
                                         <label>Áudio</label>
                                     </div>
-                                    <div class="w-full justify-center flex mb-6">
+                                    <div class="w-full justify-center flex ">
                                         <p>0</p>
                                         <input type="range" v-model="newEvaluationAVAudio">
                                         <p>100</p>
+                                    </div>
+                                    <div class="w-full justify-center flex mb-6">
+                                        <label>{{ newEvaluationAVAudio }}</label>
                                     </div>
                                 </div>
                             </div>
@@ -225,37 +252,49 @@
                                     <div class="w-full justify-center flex mt-10">
                                         <label>Desafio</label>
                                     </div>
-                                    <div class="w-full justify-center flex mb-6">
+                                    <div class="w-full justify-center flex ">
                                         <p>0</p>
                                         <input type="range" v-model="newEvaluationGMChallenge" disabled>
                                         <p>100</p>
+                                    </div>
+                                    <div class="w-full justify-center flex mb-6">
+                                        <label>{{ newEvaluationGMChallenge }}</label>
                                     </div>
 
                                     <div class="w-full justify-center flex mt-10">
                                         <label>Jogabilidade</label>
                                     </div>
-                                    <div class="w-full justify-center flex mb-6">
+                                    <div class="w-full justify-center flex ">
                                         <p>0</p>
                                         <input type="range" v-model="newEvaluationGMControl" disabled>
                                         <p>100</p>
+                                    </div>
+                                    <div class="w-full justify-center flex mb-6">
+                                        <label>{{ newEvaluationGMControl }}</label>
                                     </div>
 
                                     <div class="w-full justify-center flex mt-10">
                                         <label>Objetivo</label>
                                     </div>
-                                    <div class="w-full justify-center flex mb-6">
+                                    <div class="w-full justify-center flex ">
                                         <p>0</p>
                                         <input type="range" v-model="newEvaluationGMObjective" disabled>
                                         <p>100</p>
+                                    </div>
+                                    <div class="w-full justify-center flex mb-6">
+                                        <label>{{ newEvaluationGMObjective }}</label>
                                     </div>
 
                                     <div class="w-full justify-center flex mt-10">
                                         <label>Regras</label>
                                     </div>
-                                    <div class="w-full justify-center flex mb-6">
+                                    <div class="w-full justify-center flex ">
                                         <p>0</p>
                                         <input type="range" v-model="newEvaluationGMRule" disabled>
                                         <p>100</p>
+                                    </div>
+                                    <div class="w-full justify-center flex mb-6">
+                                        <label>{{ newEvaluationGMRule }}</label>
                                     </div>
                                 </div>
 
@@ -263,28 +302,37 @@
                                     <div class="w-full justify-center flex mt-10">
                                         <label>Cenário</label>
                                     </div>
-                                    <div class="w-full justify-center flex mb-6">
+                                    <div class="w-full justify-center flex ">
                                         <p>0</p>
                                         <input type="range" v-model="newEvaluationSTScenario" disabled>
                                         <p>100</p>
+                                    </div>
+                                    <div class="w-full justify-center flex mb-6">
+                                        <label>{{ newEvaluationSTScenario }}</label>
                                     </div>
 
                                     <div class="w-full justify-center flex mt-10">
                                         <label>Construção de Personagem</label>
                                     </div>
-                                    <div class="w-full justify-center flex mb-6">
+                                    <div class="w-full justify-center flex ">
                                         <p>0</p>
                                         <input type="range" v-model="newEvaluationSTCharacterBuilding" disabled>
                                         <p>100</p>
+                                    </div>
+                                    <div class="w-full justify-center flex mb-6">
+                                        <label>{{ newEvaluationSTCharacterBuilding }}</label>
                                     </div>
 
                                     <div class="w-full justify-center flex mt-10">
                                         <label>Enredo</label>
                                     </div>
-                                    <div class="w-full justify-center flex mb-6">
+                                    <div class="w-full justify-center flex ">
                                         <p>0</p>
                                         <input type="range" v-model="newEvaluationSTPlot" disabled>
                                         <p>100</p>
+                                    </div>
+                                    <div class="w-full justify-center flex mb-6">
+                                        <label>{{ newEvaluationSTPlot }}</label>
                                     </div>
                                 </div>
 
@@ -292,19 +340,25 @@
                                     <div class="w-full justify-center flex mt-10">
                                         <label>Gráfico</label>
                                     </div>
-                                    <div class="w-full justify-center flex mb-6">
+                                    <div class="w-full justify-center flex ">
                                         <p>0</p>
                                         <input type="range" v-model="newEvaluationAVGraphic" disabled>
                                         <p>100</p>
+                                    </div>
+                                    <div class="w-full justify-center flex mb-6">
+                                        <label>{{ newEvaluationAVGraphic }}</label>
                                     </div>
 
                                     <div class="w-full justify-center flex mt-10">
                                         <label>Áudio</label>
                                     </div>
-                                    <div class="w-full justify-center flex mb-6">
+                                    <div class="w-full justify-center flex ">
                                         <p>0</p>
                                         <input type="range" v-model="newEvaluationAVAudio" disabled>
                                         <p>100</p>
+                                    </div>
+                                    <div class="w-full justify-center flex mb-6">
+                                        <label>{{ newEvaluationAVAudio }}</label>
                                     </div>
                                 </div>
                             </div>
@@ -353,8 +407,6 @@
                 </div>
                 <div class="w-full">
                     <button class="bg-purple w-2/5 text-white h-8 font-bold rounded-lg" v-on:click="prepareEvaluationView(evaluation)">Ver Detalhes</button>
-                    <button v-if="isLogged" class="bg-purple w-2/5 text-white h-8 font-bold rounded-lg" v-on:click="">Curtir</button>
-                    <button v-if="!isLogged" class="bg-grey w-2/5 text-white h-8 font-bold rounded-lg" v-on:click="">Curtir</button>
                 </div>
             </div>
         </div>

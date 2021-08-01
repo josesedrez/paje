@@ -44,6 +44,63 @@
         <div v-if="showDeleteModal" class="opacity-25 fixed inset-0 z-40 bg-black full-screen"></div>
 
 
+        <!--        MODAL DE GRAFICO-->
+        <div v-if="showGraphModal" class="w-full grid justify-items-center text-white overflow-x-hidden overflow-y-auto over fixed inset-0 z-50 outline-none focus:outline-none justify-center items-center flex-none full-screen">
+            <div class="relative w-auto my-6 mx-auto max-w-6xl flex">
+                <div class="w-1/5"></div>
+                <!--content-->
+                <div class="border-0 rounded-lg shadow-lg relative flex-none flex-col w-3/5 full-screen bg-purple outline-none focus:outline-none">
+                    <!--header-->
+                    <div class="flex items-start justify-between p-5 border-b border-solid border-purple-darker rounded-t">
+                        <h3 class="text-3xl font-semibold">
+                            Métricas do Jogo
+                        </h3>
+                        <button class="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none" v-on:click="toggleGraphModal()">
+                          <span class="bg-transparent text-white opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
+                            ×
+                          </span>
+                        </button>
+                    </div>
+                    <!--body-->
+                    <div class="w-full relative p-6 flex-none">
+                        <div class="flex-auto mb-3">
+                            <h3>Mecânica de Jogo</h3>
+                            <GChart
+                                type="ColumnChart"
+                                :data="graphGM"
+                                :options="chartOptions"
+                            />
+                        </div>
+                        <div class="flex-auto mb-3">
+                            <h3>História</h3>
+                            <GChart
+                                type="ColumnChart"
+                                :data="graphST"
+                                :options="chartOptions"
+                            />
+                        </div>
+                        <div class="flex-auto">
+                            <h3>Audio-Visual</h3>
+                            <GChart
+                                type="ColumnChart"
+                                :data="graphAU"
+                                :options="chartOptions"
+                            />
+                        </div>
+                    </div>
+                    <!--footer-->
+                    <div class="flex items-center justify-end p-6 border-t border-solid border-purple-darker rounded-b">
+                        <button class="text-white bg-transparent border border-solid border-red-500 hover:bg-red-500 hover:text-white active:bg-red-600 font-bold uppercase text-sm px-6 py-3 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" v-on:click="toggleGraphModal()">
+                            Cancelar
+                        </button>
+                    </div>
+                </div>
+                <div class="w-1/5"></div>
+            </div>
+        </div>
+        <div v-if="showGraphModal" class="opacity-25 fixed inset-0 z-40 bg-black full-screen"></div>
+
+
         <!--        MODAL DE CATEGORIAS-->
         <div v-if="showCategoriesModal" class="w-full grid justify-items-center text-white overflow-x-hidden overflow-y-auto over fixed inset-0 z-50 outline-none focus:outline-none justify-center items-center flex-none full-screen">
             <div class="relative w-auto my-6 mx-auto max-w-6xl flex">
@@ -121,37 +178,49 @@
                                     <div class="w-full justify-center flex mt-10">
                                         <label>Desafio</label>
                                     </div>
-                                    <div class="w-full justify-center flex mb-6">
+                                    <div class="w-full justify-center flex ">
                                         <p>0</p>
                                         <input type="range" v-model="newEvaluationGMChallenge">
                                         <p>100</p>
+                                    </div>
+                                    <div class="w-full justify-center flex mb-6">
+                                        <label>{{ newEvaluationGMChallenge }}</label>
                                     </div>
 
                                     <div class="w-full justify-center flex mt-10">
                                         <label>Jogabilidade</label>
                                     </div>
-                                    <div class="w-full justify-center flex mb-6">
+                                    <div class="w-full justify-center flex ">
                                         <p>0</p>
                                         <input type="range" v-model="newEvaluationGMControl">
                                         <p>100</p>
+                                    </div>
+                                    <div class="w-full justify-center flex mb-6">
+                                        <label>{{ newEvaluationGMControl }}</label>
                                     </div>
 
                                     <div class="w-full justify-center flex mt-10">
                                         <label>Objetivo</label>
                                     </div>
-                                    <div class="w-full justify-center flex mb-6">
+                                    <div class="w-full justify-center flex ">
                                         <p>0</p>
                                         <input type="range" v-model="newEvaluationGMObjective">
                                         <p>100</p>
+                                    </div>
+                                    <div class="w-full justify-center flex mb-6">
+                                        <label>{{ newEvaluationGMObjective }}</label>
                                     </div>
 
                                     <div class="w-full justify-center flex mt-10">
                                         <label>Regras</label>
                                     </div>
-                                    <div class="w-full justify-center flex mb-6">
+                                    <div class="w-full justify-center flex ">
                                         <p>0</p>
                                         <input type="range" v-model="newEvaluationGMRule">
                                         <p>100</p>
+                                    </div>
+                                    <div class="w-full justify-center flex mb-6">
+                                        <label>{{ newEvaluationGMRule }}</label>
                                     </div>
                                 </div>
 
@@ -159,28 +228,37 @@
                                     <div class="w-full justify-center flex mt-10">
                                         <label>Cenário</label>
                                     </div>
-                                    <div class="w-full justify-center flex mb-6">
+                                    <div class="w-full justify-center flex ">
                                         <p>0</p>
                                         <input type="range" v-model="newEvaluationSTScenario">
                                         <p>100</p>
+                                    </div>
+                                    <div class="w-full justify-center flex mb-6">
+                                        <label>{{ newEvaluationSTScenario }}</label>
                                     </div>
 
                                     <div class="w-full justify-center flex mt-10">
                                         <label>Construção de Personagem</label>
                                     </div>
-                                    <div class="w-full justify-center flex mb-6">
+                                    <div class="w-full justify-center flex ">
                                         <p>0</p>
                                         <input type="range" v-model="newEvaluationSTCharacterBuilding">
                                         <p>100</p>
+                                    </div>
+                                    <div class="w-full justify-center flex mb-6">
+                                        <label>{{ newEvaluationSTCharacterBuilding }}</label>
                                     </div>
 
                                     <div class="w-full justify-center flex mt-10">
                                         <label>Enredo</label>
                                     </div>
-                                    <div class="w-full justify-center flex mb-6">
+                                    <div class="w-full justify-center flex ">
                                         <p>0</p>
                                         <input type="range" v-model="newEvaluationSTPlot">
                                         <p>100</p>
+                                    </div>
+                                    <div class="w-full justify-center flex mb-6">
+                                        <label>{{ newEvaluationSTPlot }}</label>
                                     </div>
                                 </div>
 
@@ -188,19 +266,25 @@
                                     <div class="w-full justify-center flex mt-10">
                                         <label>Gráfico</label>
                                     </div>
-                                    <div class="w-full justify-center flex mb-6">
+                                    <div class="w-full justify-center flex ">
                                         <p>0</p>
                                         <input type="range" v-model="newEvaluationAVGraphic">
                                         <p>100</p>
+                                    </div>
+                                    <div class="w-full justify-center flex mb-6">
+                                        <label>{{ newEvaluationAVGraphic }}</label>
                                     </div>
 
                                     <div class="w-full justify-center flex mt-10">
                                         <label>Áudio</label>
                                     </div>
-                                    <div class="w-full justify-center flex mb-6">
+                                    <div class="w-full justify-center flex ">
                                         <p>0</p>
                                         <input type="range" v-model="newEvaluationAVAudio">
                                         <p>100</p>
+                                    </div>
+                                    <div class="w-full justify-center flex mb-6">
+                                        <label>{{ newEvaluationAVAudio }}</label>
                                     </div>
                                 </div>
                             </div>
@@ -394,7 +478,7 @@
                     <button v-if="isAdmin" class="bg-purple w-1/4 text-white h-8 font-bold rounded-lg" v-on:click="prepareGameDelete(game)">Excluir</button>
                 </div>
                 <div class="w-full">
-                    <button class="bg-purple w-2/5 text-white h-8 font-bold rounded-lg" v-on:click="">Ver Detalhes</button>
+                    <button class="bg-purple w-2/5 text-white h-8 font-bold rounded-lg" v-on:click="prepareGraph(game)">Ver Detalhes</button>
                     <button v-if="isLogged" class="bg-purple w-2/5 text-white h-8 font-bold rounded-lg" v-on:click="prepareEvaluation(game)">Avaliar</button>
                     <button v-if="!isLogged" class="bg-grey w-2/5 text-white h-8 font-bold rounded-lg" v-on:click="">Avaliar</button>
                 </div>
@@ -408,6 +492,7 @@
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/vue-loading.css';
 import axios from 'axios';
+import { GChart } from 'vue-google-charts'
 
 export default {
     data() {
@@ -419,6 +504,7 @@ export default {
             showDeleteModal: false,
             showEvaluationModal: false,
             showCategoriesModal: false,
+            showGraphModal: false,
 
             isAdmin: false,
             isLogged: false,
@@ -459,11 +545,18 @@ export default {
 
             games: [],
             filteredGames: [],
-            categories: []
+            categories: [],
+
+            graphGM: [],
+            graphST: [],
+            graphAU: [],
+
+            chartOptions: {}
         }
     },
     components: {
-        Loading
+        Loading,
+        GChart
     },
     created: function () {
         this.isLoading = true;
@@ -509,8 +602,6 @@ export default {
 
                     this.categories = categories;
                 }
-
-                this.isLoading = false;
             });
     },
     methods: {
@@ -529,9 +620,19 @@ export default {
         toggleCategoriesModal: function(){
             this.showCategoriesModal = !this.showCategoriesModal;
         },
+        toggleGraphModal: function(){
+            this.showGraphModal = !this.showGraphModal;
+        },
         closeCategoriesModal: function(){
             this.toggleCategoriesModal();
             this.resetCategories();
+        },
+        prepareGraph: function(game){
+            this.graphGM = game.graphGM;
+            this.graphST = game.graphST;
+            this.graphAU = game.graphAU;
+
+            this.toggleGraphModal();
         },
         addNewGame() {
             this.isLoading = true;

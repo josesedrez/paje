@@ -48,29 +48,17 @@
                             <h5 class="uppercase font-bold mb-5 text-base">Menu</h5>
 
                             <ul class="list-reset">
-                                <li class="text-sm leading-loose"><router-link class="text-white" active-class="font-bold" to="/" exact>Início</router-link></li>
-                                @if(Auth::check())
-                                    <li class="text-sm leading-loose"><router-link class="text-white" active-class="font-bold" to="/profile">Perfil</router-link></li>
-                                @endif
+                                <li class="text-sm leading-loose"><router-link class="text-white" active-class="font-bold" to="/">Jogos</router-link></li>
                                 @if(Auth::check() && Auth::user()->is_admin)
                                     <li class="text-sm leading-loose"><router-link class="text-white" active-class="font-bold" to="/categories">Categorias</router-link></li>
                                 @endif
                                 <li class="text-sm leading-loose"><router-link class="text-white" active-class="font-bold" to="/evaluations">Avaliações</router-link></li>
-                                <li class="text-sm leading-loose"><router-link class="text-white" active-class="font-bold" to="/games">Jogos</router-link></li>
                                 <li class="text-sm leading-loose"><router-link class="text-white" active-class="font-bold" to="/users">Usuários</router-link></li>
+                                @if(Auth::check())
+                                    <li class="text-sm leading-loose"><router-link class="text-white" active-class="font-bold" to="/profile">Perfil</router-link></li>
+                                @endif
                             </ul>
                         </section>
-
-                        <section class="mb-8">
-                            <h5 class="uppercase font-bold mb-5 text-base">Sobre</h5>
-
-                            <ul class="list-reset">
-                                <li class="text-sm leading-loose"><router-link class="text-white" active-class="font-bold" to="/3">Como avaliar</router-link></li>
-                                <li class="text-sm leading-loose"><router-link class="text-white" active-class="font-bold" to="/4">Likes & Recompensas</router-link></li>
-                                <li class="text-sm leading-loose"><router-link class="text-white" active-class="font-bold" to="/6">Personalização</router-link></li>
-                            </ul>
-                        </section>
-
                     </aside>
 
                     <div class="primary flex-1 w-4/5 min-width flex-1 ml-3 p-3 bg-purple rounded-lg justify-center align-content-center align-items-center">
@@ -81,6 +69,8 @@
         </div>
 
         <script src="/js/app.js"></script>
+        <script src="vue.js"></script>
+        <script src="vue-google-charts/dist/vue-google-charts.browser.js"></script>
     </body>
     @jquery
     @toastr_js

@@ -27,6 +27,66 @@ class GameController extends Controller
 
                 $categories->push($cat);
             }
+
+            $objective = 0;
+            $challenge = 0;
+            $rule = 0;
+            $control = 0;
+            $scenario = 0;
+            $characterBuilding = 0;
+            $plot = 0;
+            $graphic = 0;
+            $audio = 0;
+
+            foreach ($game->evaluations as $evaluation) {
+                $gm = $evaluation->gameMechanic;
+                $st = $evaluation->story;
+                $av = $evaluation->audioVisual;
+
+                $objective += $gm->objective_grade;
+                $challenge += $gm->challenge_grade;
+                $rule += $gm->rule_grade;
+                $control += $gm->control_grade;
+                $scenario += $st->scenario_grade;
+                $characterBuilding += $st->character_building_grade;
+                $plot += $st->plot_grade;
+                $graphic += $av->graphic_grade;
+                $audio += $av->audio_grade;
+            }
+
+            $evaluationsTotal = $game->evaluations->count();
+
+            $objective = $objective/$evaluationsTotal;
+            $challenge = $challenge/$evaluationsTotal;
+            $rule = $rule/$evaluationsTotal;
+            $control = $control/$evaluationsTotal;
+            $scenario = $scenario/$evaluationsTotal;
+            $characterBuilding = $characterBuilding/$evaluationsTotal;
+            $plot = $plot/$evaluationsTotal;
+            $graphic = $graphic/$evaluationsTotal;
+            $audio = $audio/$evaluationsTotal;
+
+            $chartDataGM = [
+                ['Mecânica de Jogo', 'Total'],
+                ['Objetivo', $objective],
+                ['Desafios', $challenge],
+                ['Controle', $rule],
+                ['Regras', $control],
+            ];
+
+            $chartDataST = [
+                ['História', 'Total'],
+                ['Cenário', $scenario],
+                ['Construção de Personagem', $characterBuilding],
+                ['Enredo', $plot],
+            ];
+
+            $chartDataAU = [
+                ['Audio-Visual', 'Total'],
+                ['Gráfico', $graphic],
+                ['Audio', $audio],
+            ];
+
             $item = new Collection();
             $item->put('id', $game->id);
             $item->put('title', $game->title);
@@ -35,6 +95,9 @@ class GameController extends Controller
             $item->put('parentalRating', $game->parental_rating);
             $item->put('cover', $game->cover);
             $item->put('categories', $categories);
+            $item->put('graphGM', $chartDataGM);
+            $item->put('graphST', $chartDataST);
+            $item->put('graphAU', $chartDataAU);
 
             $response->push($item);
         }

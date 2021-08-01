@@ -16,16 +16,16 @@ export default {
             path: '*',
             component: NotFound
         },
-        {
-            path: '/',
-            component: Home
-        },
+        // {
+        //     path: '/',
+        //     component: Home
+        // },
         {
             path: '/evaluations',
             component: Evaluations
         },
         {
-            path: '/games',
+            path: '/',
             component: Games
         },
         {

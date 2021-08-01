@@ -7,6 +7,10 @@ import SlimDialog from 'v-slim-dialog';
 
 import { VueCrypton } from 'laravel-crypton';
 
+import VueGoogleCharts from 'vue-google-charts'
+
+Vue.use(VueGoogleCharts)
+
 Vue.use(SlimDialog);
 
 Vue.use(VueRouter);
