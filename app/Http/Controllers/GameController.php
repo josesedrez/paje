@@ -56,15 +56,24 @@ class GameController extends Controller
 
             $evaluationsTotal = $game->evaluations->count();
 
-            $objective = $objective/$evaluationsTotal;
-            $challenge = $challenge/$evaluationsTotal;
-            $rule = $rule/$evaluationsTotal;
-            $control = $control/$evaluationsTotal;
-            $scenario = $scenario/$evaluationsTotal;
-            $characterBuilding = $characterBuilding/$evaluationsTotal;
-            $plot = $plot/$evaluationsTotal;
-            $graphic = $graphic/$evaluationsTotal;
-            $audio = $audio/$evaluationsTotal;
+            if (!empty($objective))
+                $objective = $objective/$evaluationsTotal;
+            if (!empty($challenge))
+                $challenge = $challenge/$evaluationsTotal;
+            if (!empty($rule))
+                $rule = $rule/$evaluationsTotal;
+            if (!empty($control))
+                $control = $control/$evaluationsTotal;
+            if (!empty($scenario))
+                $scenario = $scenario/$evaluationsTotal;
+            if (!empty($characterBuilding))
+                $characterBuilding = $characterBuilding/$evaluationsTotal;
+            if (!empty($plot))
+                $plot = $plot/$evaluationsTotal;
+            if (!empty($graphic))
+                $graphic = $graphic/$evaluationsTotal;
+            if (!empty($audio))
+                $audio = $audio/$evaluationsTotal;
 
             $chartDataGM = [
                 ['Mecânica de Jogo', 'Total'],
