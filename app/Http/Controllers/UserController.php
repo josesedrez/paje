@@ -205,6 +205,30 @@ class UserController extends Controller
         return "sucesso";
     }
 
+    public function editName(Request $request) {
+        try {
+            $user = Auth::user();
+            $user->name = $request['newName'];
+            $user->save();
+
+            return $user;
+        } catch (\Exception $exception) {
+            return 'failed';
+        }
+    }
+
+    public function editEmail(Request $request) {
+        try {
+            $user = Auth::user();
+            $user->email = $request['newEmail'];
+            $user->save();
+
+            return $user;
+        } catch (\Exception $exception) {
+            return 'failed';
+        }
+    }
+
     /**
      * Remove the specified resource from storage.
      *

@@ -17,10 +17,20 @@
                 </div>
                 <div class="w-2/3 h-48 flex-none">
                     <div class="w-full h-24 pt-10 justify-center flex">
-                        <span class="text-4xl font-bold">{{ name }}</span>
+                        <a v-on:click="prepareNameEdit()" style="cursor: pointer;">
+                            <span v-if="!editingName" class="text-4xl font-bold text-button">{{ name }}</span>
+                        </a>
+                        <input v-if="editingName" class="h-8 w-2/5" type="text" v-model="name" placeholder="Novo Nome">
+                        <button v-if="editingName" class="bg-green w-1/3 text-white h-8 font-bold rounded-lg" v-on:click="editName()">Confirmar</button>
+                        <button v-if="editingName" class="bg-green w-1/3 text-white h-8 font-bold rounded-lg" v-on:click="cancelNameEdit()">Cancelar</button>
                     </div>
                     <div class="w-full h-24 pt-5 justify-center flex">
-                        <span class="text-2xl font-bold">({{ email }})</span>
+                        <a v-on:click="prepareEmailEdit()" style="cursor: pointer;">
+                            <span v-if="!editingEmail" class="text-2xl font-bold text-button">({{ email }})</span>
+                        </a>
+                        <input v-if="editingEmail" class="h-8 w-2/5" type="text" v-model="email" placeholder="Novo E-mail">
+                        <button v-if="editingEmail" class="bg-green w-1/3 text-white h-8 font-bold rounded-lg" v-on:click="editEmail()">Confirmar</button>
+                        <button v-if="editingEmail" class="bg-green w-1/3 text-white h-8 font-bold rounded-lg" v-on:click="cancelEmailEdit()">Cancelar</button>
                     </div>
                 </div>
             </div>
@@ -42,6 +52,9 @@
             return {
                 isLoading: false,
                 fullPage: true,
+
+                editingName: false,
+                editingEmail: false,
 
                 email: '',
                 name: '',
@@ -69,6 +82,58 @@
             });
         },
         methods: {
+            prepareNameEdit() {
+                this.editingName = true;
+            },
+            prepareEmailEdit() {
+                this.editingEmail = true;
+            },
+            cancelNameEdit() {
+                this.editingName = false;
+            },
+            cancelEmailEdit() {
+                this.editingEmail = false;
+            },
+            editName() {
+                this.isLoading = true;
+
+                let payload = {
+                    newName: this.name
+                };
+
+                this.$https.post('/edit-user-name', payload)
+                    .then((response) => {
+                        if (response.data === 'failed') {
+                            this.isLoading = false;
+                            return
+                        }
+
+                        this.name= response.data.name;
+                        this.editingName = false;
+
+                        this.isLoading = false;
+                    });
+            },
+            editEmail() {
+                this.isLoading = true;
+
+                let payload = {
+                    newEmail: this.email
+                };
+
+                this.$https.post('/edit-user-email', payload)
+                    .then((response) => {
+                        if (response.data === 'failed') {
+                            this.isLoading = false;
+                            return
+                        }
+
+                        this.email= response.data.email;
+                        this.editingEmail = false;
+
+                        this.isLoading = false;
+                    });
+            },
             loadFile(event) {
                 let file = event.target.files[0];
 

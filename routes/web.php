@@ -36,6 +36,10 @@ Route::middleware('crypton')->post('/current-user', 'UserController@getCurrentUs
 
 Route::post('/all-users', 'UserController@getAllUsers');
 
+Route::middleware('crypton')->post('/edit-user-name', 'UserController@editName');
+
+Route::middleware('crypton')->post('/edit-user-email', 'UserController@editEmail');
+
 // EVALUATIONS
 Route::post('/all-evaluations', 'EvaluationController@getAllEvaluations');
 

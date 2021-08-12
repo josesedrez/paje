@@ -6283,6 +6283,10 @@ a {
   min-width: 970px;
 }
 
+.text-button:hover {
+  color: grey;
+}
+
 @media (min-width: 576px) {
   .sm\:list-reset {
     list-style: none;
