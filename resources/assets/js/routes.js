@@ -7,6 +7,7 @@ import Users from './components/Users';
 import Login from './components/Login';
 import Register from './components/Register';
 import Categories from "./components/Categories";
+import ForgotPassword from "./components/ForgotPassword";
 
 export default {
     mode: 'history',
@@ -47,6 +48,10 @@ export default {
         {
             path: '/categories',
             component: Categories
-        }
+        },
+        {
+            path: '/forgot-password',
+            component: ForgotPassword
+        },
     ]
 }

@@ -6287,6 +6287,14 @@ a {
   color: grey;
 }
 
+.forgot-password {
+  color: white;
+}
+
+.forgot-password:hover {
+  color: grey;
+}
+
 @media (min-width: 576px) {
   .sm\:list-reset {
     list-style: none;

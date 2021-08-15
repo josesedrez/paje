@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UserValidation;
+use App\Mail\ForgotPassword;
+use App\Mail\NewPassword;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
 class UserController extends Controller
@@ -120,10 +123,10 @@ class UserController extends Controller
         return redirect(route('users.profile'));
     }
 
-    public function changePassword(User $user)
-    {
-        return view('users.password', compact('user'));
-    }
+//    public function changePassword(User $user)
+//    {
+//        return view('users.password', compact('user'));
+//    }
 
     public function updatePassword(UserValidation $request, User $user)
     {
@@ -227,6 +230,45 @@ class UserController extends Controller
         } catch (\Exception $exception) {
             return 'failed';
         }
+    }
+
+    public function editPassword(Request $request) {
+        try {
+            $user = Auth::user();
+            $user->password = Hash::make($request['newPassword']);
+            $user->save();
+
+            toastr()->success('Senha alterada com sucesso!');
+            return $user;
+        } catch (\Exception $exception) {
+            return 'failed';
+        }
+    }
+
+    public function forgotPasswordSendEmail(Request $request)
+    {
+        $user = User::where('email', $request['email'])->first();
+
+        if (empty($user)) {
+            return "noUser";
+        }
+
+        Mail::to($request['email'])->send(new ForgotPassword($user->id));
+
+        return "success";
+    }
+
+    public function changePassword(User $user)
+    {
+        $newPassword = Str::random(8);
+
+        $user->password = Hash::make($newPassword);
+        $user->save();
+
+        Mail::to($user->email)->send(new NewPassword($newPassword));
+
+        toastr()->success('Nova senha enviada para o seu e-mail!');
+        return redirect('/login');
     }
 
     /**

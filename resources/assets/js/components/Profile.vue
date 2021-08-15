@@ -34,8 +34,11 @@
                     </div>
                 </div>
             </div>
-            <div class="w-full justify-center h-48 flex">
-
+            <div class="w-full justify-center h-48 flex mt-3">
+                <button v-if="!editingPassword" class="bg-green w-1/3 text-white h-8 font-bold rounded-lg" v-on:click="preparePasswordEdit()">Mudar Senha</button>
+                <input v-if="editingPassword" class="h-8 w-2/5" type="password" v-model="newPassword" placeholder="Nova Senha">
+                <button v-if="editingPassword" class="bg-green w-1/3 text-white h-8 font-bold rounded-lg" v-on:click="editPassword()">Confirmar</button>
+                <button v-if="editingPassword" class="bg-green w-1/3 text-white h-8 font-bold rounded-lg" v-on:click="cancelPasswordEdit()">Cancelar</button>
             </div>
 
         </div>
@@ -55,7 +58,9 @@
 
                 editingName: false,
                 editingEmail: false,
+                editingPassword: false,
 
+                newPassword: '',
                 email: '',
                 name: '',
                 profile: '',
@@ -88,11 +93,17 @@
             prepareEmailEdit() {
                 this.editingEmail = true;
             },
+            preparePasswordEdit() {
+                this.editingPassword = true;
+            },
             cancelNameEdit() {
                 this.editingName = false;
             },
             cancelEmailEdit() {
                 this.editingEmail = false;
+            },
+            cancelPasswordEdit() {
+                this.editingPassword = false;
             },
             editName() {
                 this.isLoading = true;
@@ -132,6 +143,25 @@
                         this.editingEmail = false;
 
                         this.isLoading = false;
+                    });
+            },
+            editPassword() {
+                this.isLoading = true;
+
+                let payload = {
+                    newPassword: this.newPassword
+                };
+
+                this.$https.post('/edit-user-password', payload)
+                    .then((response) => {
+                        if (response.data === 'failed') {
+                            this.isLoading = false;
+                            return
+                        }
+
+                        this.editingPassword = false;
+                        this.isLoading = false;
+                        window.location.reload();
                     });
             },
             loadFile(event) {

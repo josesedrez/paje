@@ -11,6 +11,8 @@
 |
 */
 
+Route::get('change-password/{user}', 'UserController@changePassword');
+
 Route::get('/{any}', function () {
 //    dd(parse_url("postgres://rheokifiiodlwe:2162e299ab49adce86f93cf16e9a6bd0cf95393e114d326cf6d885469ab3b7af@ec2-52-70-15-120.compute-1.amazonaws.com:5432/dcq9jdf0qicisd"));
 
@@ -22,6 +24,8 @@ Route::middleware('crypton')->post('/register', 'Auth\RegisterController@create'
 Route::middleware('crypton')->post('/login', 'Auth\LoginController@login');
 
 Route::post('/logout', 'Auth\LoginController@logout');
+
+Route::post('/forgot-password-send-email', 'UserController@forgotPasswordSendEmail');
 
 Route::post('/change-profile', 'UserController@changeProfile');
 
@@ -39,6 +43,8 @@ Route::post('/all-users', 'UserController@getAllUsers');
 Route::middleware('crypton')->post('/edit-user-name', 'UserController@editName');
 
 Route::middleware('crypton')->post('/edit-user-email', 'UserController@editEmail');
+
+Route::middleware('crypton')->post('/edit-user-password', 'UserController@editPassword');
 
 // EVALUATIONS
 Route::post('/all-evaluations', 'EvaluationController@getAllEvaluations');
